@@ -70,8 +70,41 @@ My personal Linux study notes and hands-on labs for Cloud Security.
 
 ---
 
-## Next Goal
+## Day 3
 
-- Learn Linux permissions
-- Understand chmod
-- Understand chown
+### Topic
+
+Linux File Permissions
+
+### Why File Permissions Matter
+
+Linux file permissions control who can read, modify, or execute a file.
+Proper permissions help prevent unauthorized access and accidental changes.
+
+### Permission Types
+
+- `r` — Read
+- `w` — Write
+- `x` — Execute
+
+Permissions are assigned to:
+
+- Owner
+- Group
+- Others
+
+### Hands-on Lab
+
+| File | Permission | Purpose |
+|---|---:|---|
+| `private.txt` | `600` | Only the owner can read and modify it |
+| `shared.txt` | `644` | Everyone can read it, but only the owner can modify it |
+| `script.sh` | `755` | Everyone can execute it, but only the owner can modify it |
+
+### Commands Used
+
+```bash
+chmod 600 private.txt
+chmod 644 shared.txt
+chmod 755 script.sh
+ls -l
