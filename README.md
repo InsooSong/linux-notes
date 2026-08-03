@@ -15,8 +15,8 @@ My personal Linux study notes and hands-on labs for Cloud Security.
 ## Learning Progress
 
 - [x] Basic Linux commands
-- [ ] Linux File System
-- [ ] File Permissions
+- [x] Linux File System
+- [x] File Permissions
 - [ ] Users & Groups
 - [ ] Processes
 - [ ] Services
