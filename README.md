@@ -15,17 +15,47 @@
 
 ---
 
-# Learning Progress
+# Learning Roadmap
+
+> 📅 This roadmap represents my one-year Linux learning journey toward becoming a Cloud Security Engineer.
+
+## Week 1 - Linux Fundamentals
+
+### Goal
+
+- Understand Linux fundamentals.
+- Build practical Linux administration skills.
+- Develop a strong foundation for Cloud Security.
 
 | Status | Day | Topic |
-|--------|-----|-----------------------------|
+|--------|-----|----------------------------------|
 | ✅ | Day 1 | Linux Basic Commands |
 | ✅ | Day 2 | Linux Directory Structure |
 | ✅ | Day 3 | Linux File Permissions |
 | ✅ | Day 4 | Linux Users and Groups |
-| ⏳ | Day 5 | Linux Processes and Services |
-| ⏳ | Day 6 | SSH and Remote Access |
-| ⏳ | Day 7 | Weekly Review |
+| ✅ | Day 5 | Linux Processes and Services |
+| ⏳ | Day 6 | Linux Networking Fundamentals |
+| ⏳ | Day 7 | Weekly Summary & Review |
+
+---
+
+## Week 2 - Linux System Administration
+
+### Goal
+
+- Learn essential Linux administration skills.
+- Build confidence managing Linux servers.
+- Prepare for SSH, package management, logging, and automation.
+
+| Status | Day | Topic |
+|--------|-----|----------------------------------|
+| ⏳ | Day 8 | SSH and Remote Access |
+| ⏳ | Day 9 | Package Management |
+| ⏳ | Day 10 | Shell and Environment Variables |
+| ⏳ | Day 11 | File Search and Text Processing |
+| ⏳ | Day 12 | Log Files |
+| ⏳ | Day 13 | Cron Jobs |
+| ⏳ | Day 14 | Weekly Summary & Review |
 
 ---
 
@@ -235,3 +265,108 @@ Proper user and group management is fundamental to implementing the Principle of
 ### Next Step
 
 Linux Processes and Services
+
+---
+
+# Day 5
+
+## Topic
+
+Linux Processes and Services
+
+### Objective
+
+Understand how Linux manages running processes and learn basic process management commands.
+
+### Commands
+
+| Command | Description | Example |
+|----------|-------------|---------|
+| `ps` | Displays currently running processes. | `ps` |
+| `ps -ef` | Displays all running processes in full format. | `ps -ef` |
+| `top` | Displays real-time system and process information. | `top` |
+| `htop` | Displays an interactive process viewer (if installed). | `htop` |
+| `kill` | Terminates a running process using its PID. | `kill 1234` |
+| `kill -9` | Forcefully terminates a running process. | `kill -9 1234` |
+| `grep` | Searches for specific text in command output. | `ps -ef \| grep sleep` |
+
+### Hands-on Lab
+
+Run the following commands.
+
+```bash
+ps
+
+ps -ef
+
+top
+
+sleep 1000 &
+
+ps -ef | grep sleep
+
+kill <PID>
+
+ps -ef | grep sleep
+```
+
+Replace `<PID>` with the Process ID of the `sleep` process.
+
+### What I Learned
+
+- A process is a running instance of a program.
+- Every process has its own Process ID (PID).
+- The `ps` command displays process information.
+- The `top` command monitors processes in real time.
+- The `kill` command terminates running processes.
+- The `grep` command searches specific text from command output.
+
+### Security Perspective
+
+Monitoring running processes is one of the most important tasks in Linux security.
+
+Security engineers use process monitoring to identify suspicious applications, investigate malware, and troubleshoot abnormal system behavior.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how Linux manages running processes and how to monitor them using commands such as `ps`, `top`, and `grep`.
+
+#### Why is it important for Cloud Security?
+
+Monitoring running processes helps security engineers detect suspicious activities, investigate incidents, and understand what is happening on a Linux server.
+
+#### What will I study next?
+
+Next, I will learn Linux networking fundamentals and understand how Linux systems communicate over a network.
+
+### Next Step
+
+Linux Networking Fundamentals
+
+---
+
+# Vocabulary
+
+| Term | Meaning |
+|------|---------|
+| Configuration File | A file that stores system settings. |
+| Daemon | A background process running without direct user interaction. |
+| Directory | A folder used to organize files. |
+| Execute | Permission to run a file or program. |
+| File | A collection of data stored on disk. |
+| GID | Group Identifier. |
+| Group | A collection of users who share permissions. |
+| Home Directory | A user's personal working directory. |
+| Owner | The user who owns a file or directory. |
+| Permission | Controls access to files and directories. |
+| PID | Process Identifier. |
+| Process | A running instance of a program. |
+| Process Monitoring | Observing running processes to maintain system health and security. |
+| Root Directory | The top-level directory in Linux. |
+| Root User | The superuser with unrestricted privileges. |
+| Service | A background program managed by the operating system. |
+| sudo | Executes commands with administrator privileges. |
+| Terminal | A command-line interface used to interact with Linux. |
+| UID | User Identifier. |
