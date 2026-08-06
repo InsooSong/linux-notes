@@ -37,7 +37,7 @@
 | ✅ | Day 4 | Linux Users and Groups |
 | ✅ | Day 5 | Linux Processes and Services |
 | ✅ | Day 6 | Linux Networking Fundamentals |
-| ⏳ | Day 7 | Weekly Summary & Review |
+| ✅ | Day 7 | Weekly Summary & Review |
 
 ---
 
@@ -76,11 +76,11 @@ It documents my learning process, hands-on practice, and security-focused knowle
 
 Linux Basic Commands
 
-### Objective
+## Objective
 
 Become familiar with basic Linux commands and navigate the file system.
 
-### Commands
+## Commands
 
 | Command | Description | Example |
 |----------|-------------|---------|
@@ -94,24 +94,24 @@ Become familiar with basic Linux commands and navigate the file system.
 | `rm` | Removes files or directories. | `rm file.txt` |
 | `cat` | Displays file contents. | `cat file.txt` |
 
-### Hands-on Lab
+## Hands-on Lab
 
 - Navigate directories using `pwd`, `ls`, and `cd`
 - Create directories using `mkdir`
 - Create files using `touch`
 - Copy, move, rename, and delete files
 
-### What I Learned
+## What I Learned
 
 - Linux commands are case-sensitive.
 - The terminal is the primary interface for Linux administration.
 - File management is performed through command-line tools.
 
-### Security Perspective
+## Security Perspective
 
 Understanding basic Linux commands is essential because Cloud Security engineers frequently manage Linux servers through the command line.
 
-### Next Step
+## Next Step
 
 Linux Directory Structure
 
@@ -123,11 +123,11 @@ Linux Directory Structure
 
 Linux Directory Structure
 
-### Objective
+## Objective
 
 Understand the purpose of the major Linux directories.
 
-### Commands
+## Commands
 
 | Command | Description | Example |
 |----------|-------------|---------|
@@ -135,7 +135,7 @@ Understand the purpose of the major Linux directories.
 | `ls` | Lists directory contents. | `ls /etc` |
 | `cd` | Changes directories. | `cd /var/log` |
 
-### Hands-on Lab
+## Hands-on Lab
 
 Explore the following directories.
 
@@ -146,7 +146,7 @@ Explore the following directories.
 - `/usr`
 - `/tmp`
 
-### What I Learned
+## What I Learned
 
 - `/` is the root directory.
 - `/home` stores user home directories.
@@ -155,11 +155,11 @@ Explore the following directories.
 - `/usr` contains user applications and system utilities.
 - `/tmp` stores temporary files.
 
-### Security Perspective
+## Security Perspective
 
 Knowing where configuration files and log files are stored is important for troubleshooting, incident response, and Linux hardening.
 
-### Next Step
+## Next Step
 
 Linux File Permissions
 
@@ -171,18 +171,18 @@ Linux File Permissions
 
 Linux File Permissions
 
-### Objective
+## Objective
 
 Learn how Linux controls access to files and directories.
 
-### Commands
+## Commands
 
 | Command | Description | Example |
 |----------|-------------|---------|
 | `ls -l` | Displays detailed file permissions. | `ls -l` |
 | `chmod` | Changes file permissions. | `chmod 644 file.txt` |
 
-### Hands-on Lab
+## Hands-on Lab
 
 Create three files.
 
@@ -202,18 +202,18 @@ ls -l
 
 Observe how the permissions change after each command.
 
-### What I Learned
+## What I Learned
 
 - Linux permissions consist of Read, Write, and Execute.
 - Permissions are assigned to Owner, Group, and Others.
 - Different files require different permission levels.
 - `chmod` modifies file permissions.
 
-### Security Perspective
+## Security Perspective
 
 Applying the Principle of Least Privilege helps reduce security risks by granting only the permissions required for each file.
 
-### Next Step
+## Next Step
 
 Linux Users and Groups
 
@@ -225,11 +225,11 @@ Linux Users and Groups
 
 Linux Users and Groups
 
-### Objective
+## Objective
 
 Understand how Linux manages users and groups for access control.
 
-### Commands
+## Commands
 
 | Command | Description | Example |
 |----------|-------------|---------|
@@ -239,7 +239,7 @@ Understand how Linux manages users and groups for access control.
 | `sudo` | Executes commands with administrator privileges. | `sudo apt update` |
 | `passwd` | Changes a user's password. | `passwd` |
 
-### Hands-on Lab
+## Hands-on Lab
 
 Run the following commands.
 
@@ -252,19 +252,19 @@ cat /etc/passwd
 
 Observe the relationship between users and groups.
 
-### What I Learned
+## What I Learned
 
 - Every Linux user has a unique UID.
 - Users can belong to one or more groups.
 - Groups simplify permission management.
 - The root user has unrestricted privileges.
 
-### Security Perspective
+## Security Perspective
 
 Linux users and groups are conceptually similar to AWS IAM identities.
 Proper user and group management is fundamental to implementing the Principle of Least Privilege.
 
-### Next Step
+## Next Step
 
 Linux Processes and Services
 
@@ -276,11 +276,11 @@ Linux Processes and Services
 
 Linux Processes and Services
 
-### Objective
+## Objective
 
 Understand how Linux manages running processes and learn basic process management commands.
 
-### Commands
+## Commands
 
 | Command | Description | Example |
 |----------|-------------|---------|
@@ -292,7 +292,7 @@ Understand how Linux manages running processes and learn basic process managemen
 | `kill -9` | Forcefully terminates a running process. | `kill -9 1234` |
 | `grep` | Searches for specific text in command output. | `ps -ef \| grep sleep` |
 
-### Hands-on Lab
+## Hands-on Lab
 
 Run the following commands.
 
@@ -314,7 +314,7 @@ ps -ef | grep sleep
 
 Replace `<PID>` with the Process ID of the `sleep` process.
 
-### What I Learned
+## What I Learned
 
 - A process is a running instance of a program.
 - Every process has its own Process ID (PID).
@@ -323,27 +323,27 @@ Replace `<PID>` with the Process ID of the `sleep` process.
 - The `kill` command terminates running processes.
 - The `grep` command searches specific text from command output.
 
-### Security Perspective
+## Security Perspective
 
 Monitoring running processes is one of the most important tasks in Linux security.
 
 Security engineers use process monitoring to identify suspicious applications, investigate malware, and troubleshoot abnormal system behavior.
 
-### Reflection
+## Reflection
 
-#### What did I learn today?
+### What did I learn today?
 
 Today I learned how Linux manages running processes and how to monitor them using commands such as `ps`, `top`, and `grep`.
 
-#### Why is it important for Cloud Security?
+### Why is it important for Cloud Security?
 
 Monitoring running processes helps security engineers detect suspicious activities, investigate incidents, and understand what is happening on a Linux server.
 
-#### What will I study next?
+### What will I study next?
 
 Next, I will learn Linux networking fundamentals and understand how Linux systems communicate over a network.
 
-### Next Step
+## Next Step
 
 Linux Networking Fundamentals
 
@@ -355,11 +355,11 @@ Linux Networking Fundamentals
 
 Linux Networking Fundamentals
 
-### Objective
+## Objective
 
 Understand the fundamental networking concepts in Linux and learn how to inspect network configuration, routing information, and listening ports.
 
-### Commands
+## Commands
 
 | Command | Description | Example |
 |----------|-------------|---------|
@@ -370,7 +370,7 @@ Understand the fundamental networking concepts in Linux and learn how to inspect
 | `ping` | Tests network connectivity to another host. | `ping 8.8.8.8` |
 | `ss -tuln` | Displays listening TCP and UDP ports. | `ss -tuln` |
 
-### Hands-on Lab
+## Hands-on Lab
 
 Run the following commands.
 
@@ -388,7 +388,7 @@ ping 8.8.8.8
 ss -tuln
 ```
 
-### What I Learned
+## What I Learned
 
 - Every Linux system can have one or more network interfaces.
 - IP addresses identify devices on a network.
@@ -396,29 +396,71 @@ ss -tuln
 - The `ping` command is useful for testing network connectivity.
 - The `ss` command displays listening ports and active network sockets.
 
-### Security Perspective
+## Security Perspective
 
 Understanding Linux networking is fundamental for Cloud Security.
 
 Security engineers analyze network interfaces, routing information, and listening ports when investigating incidents, securing servers, and troubleshooting connectivity issues.
 
-### Reflection
+## Reflection
 
-#### What did I learn today?
+### What did I learn today?
 
 Today I learned how to inspect network interfaces, routing tables, IP addresses, and listening ports using basic Linux networking commands.
 
-#### Why is it important for Cloud Security?
+### Why is it important for Cloud Security?
 
 Cloud servers communicate through networks. Understanding networking fundamentals helps identify connectivity issues, detect exposed services, and secure Linux systems.
 
-#### What will I study next?
+### What will I study next?
 
 Next, I will review everything I learned during Week 1 and summarize the key concepts before moving on to Linux System Administration.
 
-### Next Step
+## Next Step
 
 Week 1 Summary & Review
+
+---
+
+# Week 1 Summary & Review
+
+## Week Summary
+
+This week I learned the fundamentals of Linux, including basic commands, directory structure, file permissions, users and groups, processes, and networking.
+
+These concepts form the foundation of Linux system administration and are essential for building Cloud Security skills.
+
+## Challenges
+
+This week, I focused on understanding the differences between Linux concepts such as processes and services, file permissions, and users versus groups.
+
+Repeated hands-on practice helped me understand how these concepts work in real Linux environments.
+
+## Key Takeaways
+
+- Linux permissions follow the Principle of Least Privilege.
+- Users and groups simplify access control.
+- Processes can be monitored and managed using Linux commands.
+- Networking fundamentals are essential for understanding cloud infrastructure.
+- Consistent hands-on practice is the best way to improve Linux skills.
+
+## Reflection
+
+### What did I accomplish this week?
+
+I successfully completed my first week of Linux study and built a strong foundation in Linux fundamentals.
+
+### What was the most important lesson?
+
+I realized that understanding Linux concepts is more valuable than simply memorizing commands.
+
+### What will I study next week?
+
+Next week, I will begin learning Linux System Administration, including SSH, package management, shell environments, log files, and automation.
+
+## Next Week Goal
+
+Learn practical Linux administration skills used in real-world server environments.
 
 ---
 
