@@ -1,17 +1,19 @@
 # Linux Notes
 
-> 🚀 This repository documents my Linux learning journey for Cloud Security.  
-> My goal is to build strong Linux fundamentals and prepare for a Cloud Security Engineer role in Australia or Canada.
+> 🚀 This repository documents my Linux learning journey toward becoming a Cloud Security Engineer.
+> My goal is to build strong Linux fundamentals through hands-on practice, continuous learning, and real-world projects.
+> Each topic includes hands-on labs, security perspectives, personal reflections, and key vocabulary to reinforce practical understanding.
 
 ---
 
 # Goal
 
 - Learn Linux fundamentals.
-- Build practical Linux skills for Cloud Security.
-- Practice Linux administration through hands-on labs.
-- Document my learning journey with GitHub.
-- Prepare for Cloud Security Engineer roles in Australia or Canada.
+- Build practical Linux administration skills.
+- Develop a strong foundation for Cloud Security.
+- Practice through hands-on labs and real-world projects.
+- Document my learning journey on GitHub.
+- Continuously improve technical and problem-solving skills.
 
 ---
 
@@ -34,7 +36,7 @@
 | ✅ | Day 3 | Linux File Permissions |
 | ✅ | Day 4 | Linux Users and Groups |
 | ✅ | Day 5 | Linux Processes and Services |
-| ⏳ | Day 6 | Linux Networking Fundamentals |
+| ✅ | Day 6 | Linux Networking Fundamentals |
 | ⏳ | Day 7 | Weekly Summary & Review |
 
 ---
@@ -347,26 +349,109 @@ Linux Networking Fundamentals
 
 ---
 
+# Day 6
+
+## Topic
+
+Linux Networking Fundamentals
+
+### Objective
+
+Understand the fundamental networking concepts in Linux and learn how to inspect network configuration, routing information, and listening ports.
+
+### Commands
+
+| Command | Description | Example |
+|----------|-------------|---------|
+| `ip addr` | Displays network interfaces and IP addresses. | `ip addr` |
+| `ip route` | Displays the routing table. | `ip route` |
+| `hostname` | Displays the system hostname. | `hostname` |
+| `hostname -I` | Displays the assigned IP address(es). | `hostname -I` |
+| `ping` | Tests network connectivity to another host. | `ping 8.8.8.8` |
+| `ss -tuln` | Displays listening TCP and UDP ports. | `ss -tuln` |
+
+### Hands-on Lab
+
+Run the following commands.
+
+```bash
+ip addr
+
+ip route
+
+hostname
+
+hostname -I
+
+ping 8.8.8.8
+
+ss -tuln
+```
+
+### What I Learned
+
+- Every Linux system can have one or more network interfaces.
+- IP addresses identify devices on a network.
+- The routing table determines where network traffic is sent.
+- The `ping` command is useful for testing network connectivity.
+- The `ss` command displays listening ports and active network sockets.
+
+### Security Perspective
+
+Understanding Linux networking is fundamental for Cloud Security.
+
+Security engineers analyze network interfaces, routing information, and listening ports when investigating incidents, securing servers, and troubleshooting connectivity issues.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how to inspect network interfaces, routing tables, IP addresses, and listening ports using basic Linux networking commands.
+
+#### Why is it important for Cloud Security?
+
+Cloud servers communicate through networks. Understanding networking fundamentals helps identify connectivity issues, detect exposed services, and secure Linux systems.
+
+#### What will I study next?
+
+Next, I will review everything I learned during Week 1 and summarize the key concepts before moving on to Linux System Administration.
+
+### Next Step
+
+Week 1 Summary & Review
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
 |------|---------|
 | Configuration File | A file that stores system settings. |
 | Daemon | A background process running without direct user interaction. |
+| Default Gateway | The router that forwards traffic to other networks. |
 | Directory | A folder used to organize files. |
 | Execute | Permission to run a file or program. |
 | File | A collection of data stored on disk. |
 | GID | Group Identifier. |
 | Group | A collection of users who share permissions. |
 | Home Directory | A user's personal working directory. |
+| Hostname | The name assigned to a computer on a network. |
+| IP Address | A unique address assigned to a device on a network. |
+| Network Interface | A hardware or virtual interface used for network communication. |
 | Owner | The user who owns a file or directory. |
 | Permission | Controls access to files and directories. |
 | PID | Process Identifier. |
+| Ping | A utility used to test network connectivity. |
+| Port | A communication endpoint used by network services. |
 | Process | A running instance of a program. |
 | Process Monitoring | Observing running processes to maintain system health and security. |
 | Root Directory | The top-level directory in Linux. |
 | Root User | The superuser with unrestricted privileges. |
+| Routing Table | A table that determines how network packets are forwarded. |
 | Service | A background program managed by the operating system. |
+| Socket | An endpoint for network communication. |
 | sudo | Executes commands with administrator privileges. |
 | Terminal | A command-line interface used to interact with Linux. |
+| TCP | A reliable connection-oriented network protocol. |
+| UDP | A connectionless network protocol with low overhead. |
 | UID | User Identifier. |
