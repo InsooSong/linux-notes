@@ -52,7 +52,7 @@
 | Status | Day | Topic |
 |--------|-----|----------------------------------|
 | ✅ | Day 8 | SSH and Remote Access |
-| ⏳ | Day 9 | Package Management |
+| ✅ | Day 9 | Package Management |
 | ⏳ | Day 10 | Shell and Environment Variables |
 | ⏳ | Day 11 | File Search and Text Processing |
 | ⏳ | Day 12 | Log Files |
@@ -537,14 +537,103 @@ Package Management
 
 ---
 
+# Day 9
+
+## Topic
+
+Linux Package Management
+
+### Objective
+
+Understand how Linux package management works and learn how to search, install, inspect, update, and remove software packages using APT and dpkg.
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `apt update` | Updates the local package index from configured repositories. | `sudo apt update` |
+| `apt search` | Searches available packages. | `apt search tree` |
+| `apt show` | Displays detailed information about a package. | `apt show tree` |
+| `apt install` | Installs a package and its dependencies. | `sudo apt install tree` |
+| `apt remove` | Removes an installed package. | `sudo apt remove tree` |
+| `apt purge` | Removes a package and its package-managed configuration files. | `sudo apt purge tree` |
+| `apt list --upgradable` | Displays packages for which upgrades are available. | `apt list --upgradable` |
+| `dpkg -l` | Lists installed Debian packages. | `dpkg -l` |
+| `dpkg -L` | Lists files installed by a package. | `dpkg -L tree` |
+
+### Hands-on Lab
+
+I inspected the configured package repository and practiced searching, installing, inspecting, and removing a Linux package.
+
+```bash
+cat /etc/apt/sources.list
+
+sudo apt update
+
+apt list --upgradable
+
+apt search tree
+
+apt show tree
+
+sudo apt install tree
+
+tree --version
+
+dpkg -l | grep tree
+
+dpkg -L tree
+
+sudo apt remove tree
+```
+
+### What I Learned
+
+- APT is a package management tool used by Debian-based Linux distributions.
+- Package repositories provide software packages and package metadata.
+- `apt update` refreshes the local package index rather than upgrading installed packages.
+- APT can resolve package dependencies during software installation.
+- `dpkg` can inspect installed Debian packages and their files.
+- Package management is important for maintaining secure and reliable Linux systems.
+
+### Security Perspective
+
+Keeping software packages appropriately patched helps reduce exposure to known vulnerabilities.
+
+Packages should come from trusted repositories, and unnecessary software should be avoided to reduce the system's attack surface.
+
+Understanding package sources and dependencies is also important when considering software supply-chain security.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how Linux package management works and practiced managing software using APT and dpkg.
+
+#### Why is it important for Cloud Security?
+
+Cloud servers depend on many software packages. Understanding how packages are installed, updated, and removed helps maintain secure systems and reduce exposure to vulnerable or unnecessary software.
+
+#### What will I study next?
+
+Next, I will learn about the Linux shell and environment variables.
+
+### Next Step
+
+Shell and Environment Variables
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
 |------|---------|
+| APT | A package management tool commonly used on Debian-based Linux systems. |
 | Authentication | The process of verifying the identity of a user or system. |
 | Configuration File | A file that stores system settings. |
 | Daemon | A background process running without direct user interaction. |
 | Default Gateway | The router that forwards traffic to other networks. |
+| Dependency | Software required by another program or package to function correctly. |
 | Directory | A folder used to organize files. |
 | Execute | Permission to run a file or program. |
 | File | A collection of data stored on disk. |
@@ -555,6 +644,9 @@ Package Management
 | IP Address | A unique address assigned to a device on a network. |
 | Network Interface | A hardware or virtual interface used for network communication. |
 | Owner | The user who owns a file or directory. |
+| Package | A bundled collection of software and related metadata. |
+| Package Repository | A source from which software packages can be downloaded and installed. |
+| Patch | An update intended to fix bugs, vulnerabilities, or other software issues. |
 | Permission | Controls access to files and directories. |
 | PID | Process Identifier. |
 | Ping | A utility used to test network connectivity. |
@@ -572,6 +664,7 @@ Package Management
 | SSH Server | A service that accepts and manages incoming SSH connections. |
 | SSH | Secure Shell, a protocol used for encrypted remote access. |
 | sudo | Executes commands with administrator privileges. |
+| Supply Chain Security | The practice of protecting software and its dependencies throughout the development and distribution process. |
 | Terminal | A command-line interface used to interact with Linux. |
 | TCP | A reliable connection-oriented network protocol. |
 | UDP | A connectionless network protocol with low overhead. |
