@@ -53,7 +53,7 @@
 |--------|-----|----------------------------------|
 | ✅ | Day 8 | SSH and Remote Access |
 | ✅ | Day 9 | Package Management |
-| ⏳ | Day 10 | Shell and Environment Variables |
+| ✅ | Day 10 | Shell and Environment Variables |
 | ⏳ | Day 11 | File Search and Text Processing |
 | ⏳ | Day 12 | Log Files |
 | ⏳ | Day 13 | Cron Jobs |
@@ -624,18 +624,123 @@ Shell and Environment Variables
 
 ---
 
+# Day 10
+
+## Topic
+
+Shell and Environment Variables
+
+### Objective
+
+Understand how the Linux shell works and learn how shell variables, environment variables, and the PATH variable affect command execution and processes.
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `echo` | Displays text or the value of a variable. | `echo $HOME` |
+| `env` | Displays environment variables. | `env` |
+| `export` | Exports a variable so that child processes can inherit it. | `export CLOUD="AWS"` |
+| `unset` | Removes a shell variable or environment variable. | `unset CLOUD` |
+| `which` | Shows the executable that would be found through PATH for a command. | `which python3` |
+| `ps -p $$` | Displays information about the current shell process. | `ps -p $$` |
+
+### Important Environment Variables
+
+| Variable | Description |
+|---|---|
+| `HOME` | The current user's home directory. |
+| `USER` | The current username. |
+| `SHELL` | The user's configured login shell. |
+| `PATH` | Directories searched when resolving executable commands. |
+| `LANG` | Language and locale configuration. |
+
+### Hands-on Lab
+
+I inspected my shell environment and practiced creating, exporting, and removing variables.
+
+```bash
+echo $SHELL
+ps -p $$
+
+echo $HOME
+echo $USER
+echo $PATH
+
+which ls
+which git
+which python3
+which ssh
+
+env
+env | grep PATH
+
+MY_NAME="Insoo"
+echo $MY_NAME
+
+CLOUD="AWS"
+echo $CLOUD
+
+export CLOUD="AWS"
+echo $CLOUD
+
+unset CLOUD
+```
+
+I also tested the difference between a shell variable and an exported environment variable by creating a child shell.
+
+### What I Learned
+
+- A shell interprets commands entered by the user.
+- Environment variables provide configuration information to processes.
+- `PATH` determines where the shell searches for executable commands.
+- Shell variables are not automatically inherited by child processes.
+- `export` makes a variable available to child processes.
+- Shell configuration files can be used to define persistent environment settings.
+
+### Security Perspective
+
+Environment variables are frequently used to provide application configuration and sometimes sensitive information.
+
+Secrets such as API keys and credentials should never be committed to a public Git repository.
+
+Using environment variables does not automatically make secrets secure, so secret management and access control are still necessary.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how the Linux shell handles variables and how environment variables affect command execution and child processes.
+
+#### Why is it important for Cloud Security?
+
+Cloud applications and automation tools depend heavily on environment configuration. Understanding environment variables helps prevent configuration mistakes and accidental exposure of sensitive credentials.
+
+#### What will I study next?
+
+Next, I will learn how to search for files and process text efficiently in Linux.
+
+### Next Step
+
+File Search and Text Processing
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
 |------|---------|
 | APT | A package management tool commonly used on Debian-based Linux systems. |
 | Authentication | The process of verifying the identity of a user or system. |
+| Child Process | A process created by another process that can inherit parts of its environment. |
 | Configuration File | A file that stores system settings. |
 | Daemon | A background process running without direct user interaction. |
 | Default Gateway | The router that forwards traffic to other networks. |
 | Dependency | Software required by another program or package to function correctly. |
 | Directory | A folder used to organize files. |
+| Environment Variable | A named value used to provide configuration information to processes. |
 | Execute | Permission to run a file or program. |
+| Export | Makes a shell variable available to child processes. |
 | File | A collection of data stored on disk. |
 | GID | Group Identifier. |
 | Group | A collection of users who share permissions. |
@@ -647,6 +752,7 @@ Shell and Environment Variables
 | Package | A bundled collection of software and related metadata. |
 | Package Repository | A source from which software packages can be downloaded and installed. |
 | Patch | An update intended to fix bugs, vulnerabilities, or other software issues. |
+| PATH | An environment variable containing directories used to locate executable commands. |
 | Permission | Controls access to files and directories. |
 | PID | Process Identifier. |
 | Ping | A utility used to test network connectivity. |
@@ -659,6 +765,8 @@ Shell and Environment Variables
 | Root User | The superuser with unrestricted privileges. |
 | Routing Table | A table that determines how network packets are forwarded. |
 | Service | A background program managed by the operating system. |
+| Shell | A program that interprets commands and interacts with the operating system. |
+| Shell Variable | A variable that exists within the current shell and is not automatically inherited by child processes. |
 | Socket | An endpoint for network communication. |
 | SSH Client | A program that initiates an SSH connection to a remote system. |
 | SSH Server | A service that accepts and manages incoming SSH connections. |
