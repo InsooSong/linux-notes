@@ -54,7 +54,7 @@
 | ✅ | Day 8 | SSH and Remote Access |
 | ✅ | Day 9 | Package Management |
 | ✅ | Day 10 | Shell and Environment Variables |
-| ⏳ | Day 11 | File Search and Text Processing |
+| ✅ | Day 11 | File Search and Text Processing |
 | ⏳ | Day 12 | Log Files |
 | ⏳ | Day 13 | Cron Jobs |
 | ⏳ | Day 14 | Weekly Summary & Review |
@@ -726,6 +726,111 @@ File Search and Text Processing
 
 ---
 
+# Day 11
+
+## Topic
+
+File Search and Text Processing
+
+### Objective
+
+Learn how to search for files and efficiently process text and log data using common Linux command-line tools.
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `find` | Searches for files and directories based on specified conditions. | `find . -name "*.log"` |
+| `grep` | Searches file contents for matching text patterns. | `grep "ERROR" app.log` |
+| `head` | Displays the beginning of a file. | `head -n 5 app.log` |
+| `tail` | Displays the end of a file. | `tail -n 5 app.log` |
+| `wc` | Counts lines, words, and bytes. | `wc -l app.log` |
+| `sort` | Sorts lines of text. | `sort users.txt` |
+| `uniq` | Removes or counts adjacent duplicate lines. | `sort users.txt \| uniq -c` |
+| `\|` | Passes the output of one command to another command. | `grep "ERROR" app.log \| wc -l` |
+
+### Hands-on Lab
+
+I created sample files and logs and practiced searching and analyzing them.
+
+```bash
+mkdir -p ~/day11-lab/logs
+cd ~/day11-lab
+
+touch notes.txt
+touch config.conf
+touch logs/app.log
+touch logs/security.log
+
+find .
+find . -name "*.log"
+find . -type f
+
+grep "ERROR" logs/app.log
+grep -i "error" logs/app.log
+grep -n "ERROR" logs/app.log
+
+head -n 3 logs/app.log
+tail -n 2 logs/app.log
+
+grep "ERROR" logs/app.log | wc -l
+
+sort users.txt
+sort users.txt | uniq -c
+```
+
+### Log Analysis Practice
+
+I also created a sample security log and used text-processing commands to identify repeated failed login attempts.
+
+```bash
+grep "FAILED" logs/security.log
+
+grep "FAILED" logs/security.log | wc -l
+
+grep "10.0.0.5" logs/security.log | wc -l
+```
+
+### What I Learned
+
+- `find` searches for files and directories.
+- `grep` searches for patterns inside files.
+- Pipes allow multiple commands to be combined.
+- `head` and `tail` help inspect portions of large files.
+- `wc` can count matching log events.
+- `sort` and `uniq` can help identify repeated values and patterns.
+- Linux command-line tools can be combined to perform simple log analysis.
+
+### Security Perspective
+
+Searching and processing text is an important skill for security investigations.
+
+System and application logs can contain information about failed authentication attempts, suspicious requests, configuration errors, and other security events.
+
+Command-line tools such as `grep`, `find`, `sort`, `uniq`, and `wc` allow security engineers to quickly investigate large amounts of text data.
+
+However, repeated log entries alone do not prove that an attack occurred. Security events should be analyzed together with additional context.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how to search Linux files and analyze text and log data using common command-line tools.
+
+#### Why is it important for Cloud Security?
+
+Cloud workloads generate large amounts of logs and configuration data. Being able to quickly search and analyze this information helps with troubleshooting, incident investigation, and security monitoring.
+
+#### What will I study next?
+
+Next, I will learn about Linux log files and how the operating system records important system events.
+
+### Next Step
+
+Log Files
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -743,6 +848,7 @@ File Search and Text Processing
 | Export | Makes a shell variable available to child processes. |
 | File | A collection of data stored on disk. |
 | GID | Group Identifier. |
+| Grep | A command-line tool used to search text for matching patterns. |
 | Group | A collection of users who share permissions. |
 | Home Directory | A user's personal working directory. |
 | Hostname | The name assigned to a computer on a network. |
@@ -756,6 +862,7 @@ File Search and Text Processing
 | Permission | Controls access to files and directories. |
 | PID | Process Identifier. |
 | Ping | A utility used to test network connectivity. |
+| Pipe | A mechanism that passes the output of one command as input to another command. |
 | Port | A communication endpoint used by network services. |
 | Private Key | A secret cryptographic key that must be protected by its owner. |
 | Process | A running instance of a program. |
@@ -771,9 +878,12 @@ File Search and Text Processing
 | SSH Client | A program that initiates an SSH connection to a remote system. |
 | SSH Server | A service that accepts and manages incoming SSH connections. |
 | SSH | Secure Shell, a protocol used for encrypted remote access. |
+| Standard Input | Data received by a command or process. |
+| Standard Output | Data produced by a command or process. |
 | sudo | Executes commands with administrator privileges. |
 | Supply Chain Security | The practice of protecting software and its dependencies throughout the development and distribution process. |
 | Terminal | A command-line interface used to interact with Linux. |
 | TCP | A reliable connection-oriented network protocol. |
 | UDP | A connectionless network protocol with low overhead. |
 | UID | User Identifier. |
+| Wildcard | A symbol used to represent one or more characters when matching file names. |
