@@ -58,7 +58,7 @@
 | ✅ | Day 11 | File Search and Text Processing |
 | ✅ | Day 12 | Log Files |
 | ✅ | Day 13 | Cron Jobs |
-| ⏳ | Day 14 | Weekly Summary & Review |
+| ✅ | Day 14 | Weekly Summary & Review |
 
 ---
 
@@ -463,45 +463,156 @@ Week 1 Summary & Review
 
 ---
 
-# Week 1 Summary & Review
+# Day 7
 
-## Week Summary
+## Topic
 
-This week I learned the fundamentals of Linux, including basic commands, directory structure, file permissions, users and groups, processes, and networking.
+Week 1 Summary & Review
 
-These concepts form the foundation of Linux system administration and are essential for building Cloud Security skills.
+### Objective
 
-## Challenges
+Review the Linux fundamentals covered during Week 1 and understand how basic Linux concepts work together as the foundation for system administration and Cloud Security.
+
+### Week 1 Topics
+
+| Day | Topic |
+|---|---|
+| Day 1 | Linux Basic Commands |
+| Day 2 | Linux Directory Structure |
+| Day 3 | Linux File Permissions |
+| Day 4 | Linux Users and Groups |
+| Day 5 | Linux Processes and Services |
+| Day 6 | Linux Networking Fundamentals |
+
+### Key Commands Reviewed
+
+| Area | Commands |
+|---|---|
+| Basic Navigation | `pwd`, `ls`, `cd` |
+| File Management | `touch`, `mkdir`, `cp`, `mv`, `rm` |
+| File Inspection | `cat`, `less`, `head`, `tail` |
+| Permissions | `chmod`, `chown`, `chgrp` |
+| Users & Groups | `whoami`, `id`, `groups`, `getent` |
+| Processes | `ps`, `top`, `pgrep`, `kill` |
+| Services | `systemctl` |
+| Networking | `ip`, `ping`, `ss`, `curl` |
+
+### Fundamentals Review Lab
+
+I reviewed the basic state of my Linux environment using commands learned during Week 1.
+
+```bash
+pwd
+ls -la
+
+whoami
+id
+groups
+
+ps aux
+systemctl --type=service --state=running
+
+ip addr
+ip route
+ss -tuln
+```
+
+I also reviewed file permissions and ownership.
+
+```bash
+ls -l
+
+touch review-file.txt
+
+chmod 640 review-file.txt
+
+ls -l review-file.txt
+```
+
+### Concept Review
+
+During Week 1, I learned how several fundamental Linux concepts are connected.
+
+```text
+Linux System
+     │
+     ├── Files and Directories
+     │        │
+     │        └── Permissions
+     │
+     ├── Users and Groups
+     │        │
+     │        └── Access Control
+     │
+     ├── Processes
+     │        │
+     │        └── Services
+     │
+     └── Networking
+              │
+              ├── IP Address
+              ├── Routes
+              └── Listening Ports
+```
+
+Understanding these relationships is more important than simply memorizing individual commands.
+
+### Security Perspective
+
+Linux fundamentals are closely related to system security.
+
+File permissions and ownership control who can access resources, while users and groups provide the foundation for access management.
+
+Processes and services help identify what is running on a system, and networking commands provide visibility into network interfaces, routes, and listening services.
+
+These concepts provide the foundation for applying the Principle of Least Privilege and understanding Linux security.
+
+### Challenges
 
 This week, I focused on understanding the differences between Linux concepts such as processes and services, file permissions, and users versus groups.
 
 Repeated hands-on practice helped me understand how these concepts work in real Linux environments.
 
-## Key Takeaways
+### Week 1 Key Takeaways
 
-- Linux permissions follow the Principle of Least Privilege.
-- Users and groups simplify access control.
-- Processes can be monitored and managed using Linux commands.
-- Networking fundamentals are essential for understanding cloud infrastructure.
-- Consistent hands-on practice is the best way to improve Linux skills.
+- Linux commands provide tools for interacting with and managing the operating system.
+- The Linux directory structure organizes system files according to their purpose.
+- File permissions and ownership control access to system resources.
+- Linux permissions support the Principle of Least Privilege.
+- Users and groups simplify access control and permission management.
+- Processes represent running programs, while services provide background system functionality.
+- Networking fundamentals are essential for understanding Linux servers and cloud infrastructure.
+- Hands-on practice is essential for developing practical Linux skills.
 
-## Reflection
+### Reflection
 
-### What did I accomplish this week?
+#### What did I accomplish this week?
 
 I successfully completed my first week of Linux study and built a strong foundation in Linux fundamentals.
 
-### What was the most important lesson?
+#### What was the most important lesson?
 
-I realized that understanding Linux concepts is more valuable than simply memorizing commands.
+I realized that understanding how Linux concepts are connected is more valuable than simply memorizing commands.
 
-### What will I study next week?
+#### What was difficult?
 
-Next week, I will begin learning Linux System Administration, including SSH, package management, shell environments, log files, and automation.
+I focused on understanding the differences between processes and services, file permissions, and users versus groups.
 
-## Next Week Goal
+Repeated hands-on practice helped reinforce these concepts.
 
-Learn practical Linux administration skills used in real-world server environments.
+#### Why is it important for Cloud Security?
+
+Linux is widely used for cloud workloads and servers.
+
+Understanding Linux permissions, users, processes, services, and networking provides an essential foundation for secure system administration and Cloud Security.
+
+#### What will I study next?
+
+Next, I will begin Linux System Administration, including SSH, package management, shell environments, file searching, log analysis, and task scheduling.
+
+### Next Step
+
+Linux System Administration — SSH and Remote Access
 
 ---
 
@@ -1110,6 +1221,135 @@ Week 2 Summary & Review
 
 ---
 
+# Day 14
+
+## Topic
+
+Week 2 Summary & Review
+
+### Objective
+
+Review the Linux system administration topics covered during Week 2 and apply them together through a basic Linux administration and troubleshooting exercise.
+
+### Week 2 Topics
+
+| Day | Topic |
+|---|---|
+| Day 8 | SSH and Remote Access |
+| Day 9 | Package Management |
+| Day 10 | Shell and Environment Variables |
+| Day 11 | File Search and Text Processing |
+| Day 12 | Log Files |
+| Day 13 | Cron Jobs |
+
+### Key Commands Reviewed
+
+| Area | Commands |
+|---|---|
+| SSH | `ssh`, `ssh-keygen`, `systemctl status ssh` |
+| Packages | `apt`, `apt-cache` |
+| Shell | `echo`, `env`, `export`, `which` |
+| File Search | `find`, `grep` |
+| Text Processing | `head`, `tail`, `wc`, `sort`, `uniq` |
+| Logs | `journalctl`, `dmesg` |
+| Scheduling | `crontab`, `cron` |
+| Network | `ip`, `ss` |
+| Services | `systemctl` |
+
+### Administration Review Lab
+
+I reviewed the basic state of my Linux environment using commands learned during Weeks 1 and 2.
+
+```bash
+hostname
+uname -a
+uptime
+
+ps aux
+systemctl --type=service --state=running
+
+ip addr
+ip route
+ss -tuln
+
+systemctl status ssh
+
+journalctl -b -n 30
+journalctl -b -p err
+journalctl -u ssh -n 20
+
+crontab -l
+cat /etc/crontab
+ls -la /etc/cron.d/
+```
+
+### Troubleshooting Approach
+
+Instead of immediately changing a configuration when a problem occurs, I learned to investigate the system step by step.
+
+For example, when troubleshooting SSH connectivity:
+
+```text
+Service Status
+      ↓
+Listening Port
+      ↓
+Network Configuration
+      ↓
+SSH Configuration
+      ↓
+Authentication
+      ↓
+Logs
+```
+
+This approach helps identify the actual cause of a problem before making changes.
+
+### Security Perspective
+
+Linux administration and security are closely connected.
+
+Processes, services, network connections, logs, scheduled tasks, users, and file permissions can all provide useful information when investigating suspicious activity.
+
+I also learned that individual log events should not automatically be treated as proof of an attack. Security events should be analyzed together with additional context and evidence.
+
+### Week 2 Key Takeaways
+
+- SSH provides secure remote access to Linux systems.
+- Package management helps maintain installed software.
+- Shell and environment variables affect command and application behavior.
+- `find` and `grep` are essential tools for locating files and information.
+- Pipes allow Linux commands to be combined for efficient text processing.
+- System logs are important for troubleshooting and security investigations.
+- Cron provides scheduled automation but can also be relevant when investigating persistence.
+- Linux administration requires understanding how multiple system components interact.
+
+### Reflection
+
+#### What did I learn this week?
+
+During Week 2, I learned essential Linux administration skills including remote access, package management, shell environments, file searching, log analysis, and task scheduling.
+
+More importantly, I started to understand how these individual Linux components interact during system administration and troubleshooting.
+
+#### What was difficult?
+
+I will continue reviewing the topics and commands that were difficult to understand or remember during the week.
+
+#### Why is it important for Cloud Security?
+
+Cloud workloads frequently run on Linux systems. Understanding Linux administration helps with secure configuration, troubleshooting, monitoring, incident investigation, and automation.
+
+#### What will I study next?
+
+Next, I will begin Linux Security Fundamentals, starting with sudo and privilege management.
+
+### Next Step
+
+Linux Security Fundamentals — sudo and Privilege Management
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -1136,6 +1376,7 @@ Week 2 Summary & Review
 | Group | A collection of users who share permissions. |
 | Home Directory | A user's personal working directory. |
 | Hostname | The name assigned to a computer on a network. |
+| Investigation | The process of examining system information and evidence to understand an event or problem. |
 | IP Address | A unique address assigned to a device on a network. |
 | Journal | The systemd logging system that stores and manages system events. |
 | Log | A record of an event generated by a system, service, or application. |
@@ -1174,6 +1415,7 @@ Week 2 Summary & Review
 | Supply Chain Security | The practice of protecting software and its dependencies throughout the development and distribution process. |
 | Terminal | A command-line interface used to interact with Linux. |
 | TCP | A reliable connection-oriented network protocol. |
+| Troubleshooting | A systematic process used to identify and resolve the cause of a technical problem. |
 | UDP | A connectionless network protocol with low overhead. |
 | UID | User Identifier. |
 | Wildcard | A symbol used to represent one or more characters when matching file names. |
