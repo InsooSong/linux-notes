@@ -72,7 +72,7 @@
 
 | Status | Day    | Topic                              |
 | ------ | ------ | ---------------------------------- |
-| ⏳      | Day 15 | sudo and Privilege Management      |
+| ✅      | Day 15 | sudo and Privilege Management      |
 | ⏳      | Day 16 | Linux Authentication and PAM       |
 | ⏳      | Day 17 | Linux Firewall Fundamentals        |
 | ⏳      | Day 18 | SSH Hardening                      |
@@ -1350,6 +1350,144 @@ Linux Security Fundamentals — sudo and Privilege Management
 
 ---
 
+# Day 15
+
+## Topic
+
+sudo and Privilege Management
+
+### Objective
+
+Understand Linux privilege management, the role of the root account, and how sudo can be used to provide controlled administrative access.
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `id` | Displays user and group identity information. | `id root` |
+| `sudo` | Executes an authorized command with another user's privileges, typically root. | `sudo apt update` |
+| `sudo -l` | Lists sudo privileges available to the current user. | `sudo -l` |
+| `groups` | Displays the groups associated with a user. | `groups securitylab` |
+| `getent group` | Retrieves group information from configured system databases. | `getent group sudo` |
+| `visudo` | Safely edits and validates sudoers configuration. | `sudo visudo` |
+| `usermod -aG` | Adds a user to a supplementary group while preserving existing supplementary groups. | `sudo usermod -aG sudo securitylab` |
+| `deluser` | Removes a user from a group on Debian-based systems. | `sudo deluser securitylab sudo` |
+
+### Root and Privileges
+
+The root account is the Linux superuser and normally has UID 0.
+
+```bash
+id root
+```
+
+Administrative privileges provide powerful control over a Linux system, but unnecessary elevated access increases both operational and security risks.
+
+The Principle of Least Privilege recommends granting only the permissions required to perform a task.
+
+### sudo
+
+`sudo` allows authorized users to execute commands with elevated privileges without continuously operating from a root shell.
+
+I inspected my current sudo privileges and group membership.
+
+```bash
+sudo -l
+
+groups
+
+getent group sudo
+```
+
+### sudoers
+
+I inspected the sudo configuration and learned that `/etc/sudoers` controls important sudo authorization rules.
+
+```bash
+sudo less /etc/sudoers
+
+sudo ls -la /etc/sudoers.d/
+```
+
+I also learned that `visudo` should be used when editing sudoers configuration because it can validate the configuration syntax.
+
+```bash
+sudo visudo
+```
+
+### Hands-on Lab
+
+I created a temporary user to practice privilege management.
+
+```bash
+sudo useradd -m securitylab
+
+id securitylab
+
+groups securitylab
+```
+
+I then added the user to the sudo group.
+
+```bash
+sudo usermod -aG sudo securitylab
+
+groups securitylab
+```
+
+After verifying the group membership, I removed the sudo privilege and cleaned up the test account.
+
+```bash
+sudo deluser securitylab sudo
+
+groups securitylab
+
+sudo userdel -r securitylab
+```
+
+### What I Learned
+
+- The root account has highly privileged access to the Linux system.
+- UID 0 identifies the superuser privilege context.
+- `sudo` provides controlled access to elevated commands.
+- sudo privileges can be inspected using `sudo -l`.
+- Linux groups can be used as part of privilege management.
+- `/etc/sudoers` and `/etc/sudoers.d/` define sudo authorization rules.
+- `visudo` provides a safer method for editing sudoers configuration.
+- Administrative privileges should follow the Principle of Least Privilege.
+
+### Security Perspective
+
+Privilege management is a fundamental Linux security control.
+
+Users should not receive unrestricted administrative privileges unless they are required.
+
+Overly permissive sudo configurations, insecure privileged scripts, and other privilege-related misconfigurations can increase the risk of privilege escalation.
+
+Security reviews should therefore examine privileged accounts, sudo permissions, group memberships, and privileged configuration carefully.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how Linux manages administrative privileges using the root account, sudo, groups, and sudoers configuration.
+
+#### Why is it important for Cloud Security?
+
+Linux servers are commonly used for cloud workloads. Restricting administrative privileges reduces the impact of compromised accounts, configuration mistakes, and unauthorized activity.
+
+The same Least Privilege principle is also fundamental to cloud IAM security.
+
+#### What will I study next?
+
+Next, I will learn how Linux authentication works and understand the role of PAM.
+
+### Next Step
+
+Linux Authentication and PAM
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -1379,6 +1517,7 @@ Linux Security Fundamentals — sudo and Privilege Management
 | Investigation | The process of examining system information and evidence to understand an event or problem. |
 | IP Address | A unique address assigned to a device on a network. |
 | Journal | The systemd logging system that stores and manages system events. |
+| Least Privilege | A security principle that grants only the permissions required to perform a task. |
 | Log | A record of an event generated by a system, service, or application. |
 | Log Retention | The period of time logs are stored before deletion or archival. |
 | Network Interface | A hardware or virtual interface used for network communication. |
@@ -1395,11 +1534,12 @@ Linux Security Fundamentals — sudo and Privilege Management
 | Port | A communication endpoint used by network services. |
 | Priority | A severity level assigned to a log event. |
 | Private Key | A secret cryptographic key that must be protected by its owner. |
+| Privilege Escalation | The process of gaining permissions beyond those originally authorized. |
 | Process | A running instance of a program. |
 | Process Monitoring | Observing running processes to maintain system health and security. |
 | Public Key | A cryptographic key that can be shared and used with its corresponding private key. |
 | Root Directory | The top-level directory in Linux. |
-| Root User | The superuser with unrestricted privileges. |
+| Root User | The Linux superuser account with UID 0 and highly privileged system access. |
 | Routing Table | A table that determines how network packets are forwarded. |
 | Scheduled Task | A command or program configured to run automatically at a specified time or interval. |
 | Service | A background program managed by the operating system. |
@@ -1411,7 +1551,9 @@ Linux Security Fundamentals — sudo and Privilege Management
 | SSH | Secure Shell, a protocol used for encrypted remote access. |
 | Standard Input | Data received by a command or process. |
 | Standard Output | Data produced by a command or process. |
-| sudo | Executes commands with administrator privileges. |
+| sudo | A mechanism that allows authorized users to execute commands with another user's privileges. |
+| sudoers | Configuration that defines which users or groups can execute commands through sudo. |
+| Superuser | A user account with highly privileged administrative access to a system. |
 | Supply Chain Security | The practice of protecting software and its dependencies throughout the development and distribution process. |
 | Terminal | A command-line interface used to interact with Linux. |
 | TCP | A reliable connection-oriented network protocol. |
