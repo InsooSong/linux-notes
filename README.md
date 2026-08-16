@@ -73,7 +73,7 @@
 | Status | Day    | Topic                              |
 | ------ | ------ | ---------------------------------- |
 | ✅      | Day 15 | sudo and Privilege Management      |
-| ⏳      | Day 16 | Linux Authentication and PAM       |
+| ✅      | Day 16 | Linux Authentication and PAM       |
 | ⏳      | Day 17 | Linux Firewall Fundamentals        |
 | ⏳      | Day 18 | SSH Hardening                      |
 | ⏳      | Day 19 | File Integrity and Hashing         |
@@ -1488,6 +1488,178 @@ Linux Authentication and PAM
 
 ---
 
+# Day 16
+
+## Topic
+
+Linux Authentication and PAM
+
+### Objective
+
+Understand how Linux manages user authentication and learn the basic role of PAM (Pluggable Authentication Modules) in providing a common authentication framework for Linux applications and services.
+
+### Authentication vs Authorization
+
+Authentication verifies the identity of a user.
+
+```text
+Who are you?
+```
+
+Authorization determines what an authenticated user is allowed to do.
+
+```text
+What are you allowed to do?
+```
+
+Both concepts are fundamental to Linux and Cloud Security.
+
+### Important Authentication Files
+
+| File | Description |
+|---|---|
+| `/etc/passwd` | Stores general user account information such as UID, GID, home directory, and login shell. |
+| `/etc/shadow` | Stores protected password-related authentication and password aging information. |
+| `/etc/pam.d/` | Contains PAM configuration used by applications and services. |
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `getent passwd` | Retrieves user account information. | `getent passwd "$(whoami)"` |
+| `passwd -S` | Displays password status information for an account. | `sudo passwd -S "$(whoami)"` |
+| `chage -l` | Displays password aging information. | `sudo chage -l "$(whoami)"` |
+| `ls -l` | Displays permissions and ownership information. | `ls -l /etc/shadow` |
+| `journalctl` | Displays system logs that may contain authentication-related events. | `journalctl -b` |
+
+### `/etc/passwd` and `/etc/shadow`
+
+I inspected the Linux account databases and compared their permissions.
+
+```bash
+getent passwd "$(whoami)"
+
+ls -l /etc/passwd
+ls -l /etc/shadow
+```
+
+`/etc/passwd` contains general account information and is normally readable by users.
+
+Sensitive password-related information is separated into `/etc/shadow`, which has more restrictive access.
+
+I learned that Linux does not normally store user passwords as plaintext in `/etc/shadow`.
+
+### Password and Account Information
+
+I inspected the password status and aging information for my account.
+
+```bash
+sudo passwd -S "$(whoami)"
+
+sudo chage -l "$(whoami)"
+```
+
+These commands can provide information about password status, password expiration, and account expiration.
+
+### PAM
+
+PAM stands for Pluggable Authentication Modules.
+
+It provides a common authentication framework that can be used by Linux applications and services such as login, sudo, su, and SSH-related components.
+
+I inspected the available PAM configuration.
+
+```bash
+ls -la /etc/pam.d/
+
+cat /etc/pam.d/sudo
+
+cat /etc/pam.d/common-auth
+```
+
+### PAM Module Types
+
+| Type | Purpose |
+|---|---|
+| `auth` | Handles authentication-related operations. |
+| `account` | Checks account-related conditions and restrictions. |
+| `password` | Handles password and credential updates. |
+| `session` | Performs tasks associated with starting and ending sessions. |
+
+### Hands-on Lab
+
+I investigated the authentication configuration of my Linux environment without modifying the authentication settings.
+
+```bash
+whoami
+id
+
+getent passwd "$(whoami)"
+
+ls -l /etc/passwd
+ls -l /etc/shadow
+
+sudo passwd -S "$(whoami)"
+sudo chage -l "$(whoami)"
+
+ls -la /etc/pam.d/
+
+cat /etc/pam.d/sudo
+cat /etc/pam.d/common-auth
+```
+
+I also reviewed authentication-related system logs.
+
+```bash
+journalctl -b | grep -i "authentication"
+
+journalctl -b | grep -i "failed"
+```
+
+### What I Learned
+
+- Authentication verifies a user's identity.
+- Authorization determines what an authenticated user can access or perform.
+- `/etc/passwd` stores general Linux account information.
+- `/etc/shadow` protects password-related authentication information.
+- Passwords are not normally stored as plaintext.
+- PAM provides a common authentication framework for Linux applications and services.
+- PAM configurations are stored under `/etc/pam.d/`.
+- PAM uses different module types for authentication, account management, password management, and sessions.
+- Authentication events can provide important information during security investigations.
+
+### Security Perspective
+
+Authentication is one of the fundamental security controls of a Linux system.
+
+Sensitive authentication data must be protected from unauthorized access, and authentication policies should be configured carefully.
+
+PAM configuration changes can affect login and administrative access, so authentication settings should be tested and modified cautiously.
+
+Authentication logs are also important for identifying failed login attempts and investigating suspicious access activity.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how Linux stores account and password-related information and how PAM provides a common authentication framework for Linux applications and services.
+
+#### Why is it important for Cloud Security?
+
+Authentication is the first step in controlling access to Linux and cloud resources.
+
+Understanding the difference between authentication and authorization helps with designing secure access controls and investigating unauthorized access.
+
+#### What will I study next?
+
+Next, I will learn how Linux firewalls control network traffic and reduce unnecessary network exposure.
+
+### Next Step
+
+Linux Firewall Fundamentals
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -1496,6 +1668,7 @@ Linux Authentication and PAM
 | APT | A package management tool commonly used on Debian-based Linux systems. |
 | Audit Log | A record used to track important actions and changes for accountability and investigation. |
 | Authentication | The process of verifying the identity of a user or system. |
+| Authorization | The process of determining what an authenticated identity is allowed to access or perform. |
 | Centralized Logging | Collecting logs from multiple systems into a central location for monitoring and analysis. |
 | Child Process | A process created by another process that can inherit parts of its environment. |
 | Configuration File | A file that stores system settings. |
@@ -1524,6 +1697,8 @@ Linux Authentication and PAM
 | Owner | The user who owns a file or directory. |
 | Package | A bundled collection of software and related metadata. |
 | Package Repository | A source from which software packages can be downloaded and installed. |
+| PAM | Pluggable Authentication Modules, a framework used by Linux applications and services for authentication and related account operations. |
+| Password Hash | A derived representation used as part of password verification instead of storing the plaintext password. |
 | Patch | An update intended to fix bugs, vulnerabilities, or other software issues. |
 | PATH | An environment variable containing directories used to locate executable commands. |
 | Permission | Controls access to files and directories. |
@@ -1543,6 +1718,7 @@ Linux Authentication and PAM
 | Routing Table | A table that determines how network packets are forwarded. |
 | Scheduled Task | A command or program configured to run automatically at a specified time or interval. |
 | Service | A background program managed by the operating system. |
+| Session | A period of interaction between an authenticated user and a system or service. |
 | Shell | A program that interprets commands and interacts with the operating system. |
 | Shell Variable | A variable that exists within the current shell and is not automatically inherited by child processes. |
 | Socket | An endpoint for network communication. |
