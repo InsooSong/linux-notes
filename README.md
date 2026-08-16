@@ -74,7 +74,7 @@
 | ------ | ------ | ---------------------------------- |
 | ✅      | Day 15 | sudo and Privilege Management      |
 | ✅      | Day 16 | Linux Authentication and PAM       |
-| ⏳      | Day 17 | Linux Firewall Fundamentals        |
+| ✅      | Day 17 | Linux Firewall Fundamentals        |
 | ⏳      | Day 18 | SSH Hardening                      |
 | ⏳      | Day 19 | File Integrity and Hashing         |
 | ⏳      | Day 20 | Basic Linux Security Auditing      |
@@ -1660,12 +1660,210 @@ Linux Firewall Fundamentals
 
 ---
 
+# Day 17
+
+## Topic
+
+Linux Firewall Fundamentals
+
+### Objective
+
+Understand how Linux firewalls control network traffic and learn how firewall rules, listening ports, and network services work together to reduce unnecessary network exposure.
+
+### Firewall Fundamentals
+
+A firewall controls network traffic according to defined security rules.
+
+Firewall decisions can be based on information such as:
+
+- Source and destination addresses
+- Network protocols
+- Source and destination ports
+- Traffic direction
+- Connection state
+
+A listening port does not automatically mean that a service is reachable from an external network.
+
+Network access may also be restricted by host firewalls, cloud security controls, routing, and other network components.
+
+### Important Concepts
+
+| Concept | Description |
+|---|---|
+| Inbound Traffic | Network traffic entering a system. |
+| Outbound Traffic | Network traffic leaving a system. |
+| Accept | Allows matching network traffic. |
+| Drop | Silently discards matching traffic. |
+| Reject | Blocks matching traffic and may return an error response. |
+| Default Deny | A security approach that blocks unnecessary traffic and explicitly allows required traffic. |
+| Stateful Firewall | A firewall that can track connection state when applying security policies. |
+
+### Linux Firewall Technologies
+
+| Technology | Description |
+|---|---|
+| Netfilter | Linux kernel infrastructure used for network packet processing and filtering. |
+| nftables | A modern Linux framework for configuring packet filtering rules. |
+| iptables | A traditional command and rule system widely used for Linux firewall management. |
+| UFW | A simplified frontend for managing firewall policies. |
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `ss -tuln` | Displays listening TCP and UDP sockets. | `ss -tuln` |
+| `ss -tulpn` | Displays listening sockets with process information when permitted. | `sudo ss -tulpn` |
+| `nft list ruleset` | Displays the current nftables ruleset. | `sudo nft list ruleset` |
+| `iptables -L` | Lists iptables filter rules. | `sudo iptables -L -n -v` |
+| `ufw status` | Displays UFW firewall status and rules. | `sudo ufw status verbose` |
+
+### Hands-on Lab
+
+I first identified the firewall tools available in my Linux environment.
+
+```bash
+which nft
+which iptables
+which ufw
+```
+
+I then inspected the current firewall configuration without modifying or deleting existing rules.
+
+```bash
+sudo nft list ruleset
+
+sudo iptables -L -n -v
+```
+
+I also inspected listening network services.
+
+```bash
+ss -tuln
+
+sudo ss -tulpn
+```
+
+### Listening Port Lab
+
+I created a temporary local HTTP service to understand the relationship between an application and a listening port.
+
+```bash
+mkdir -p ~/day17-lab
+cd ~/day17-lab
+
+python3 -m http.server 8080 --bind 127.0.0.1
+```
+
+From another terminal, I verified the listening socket and tested the service.
+
+```bash
+ss -tuln | grep 8080
+
+curl http://127.0.0.1:8080
+```
+
+After the test, I stopped the temporary HTTP server.
+
+### Firewall Policy Exercise
+
+I designed a basic firewall policy for a hypothetical Linux web server.
+
+Required services:
+
+```text
+SSH    TCP/22
+HTTP   TCP/80
+HTTPS  TCP/443
+```
+
+Example security approach:
+
+```text
+SSH
+→ Allow only from an administrative network
+
+HTTP
+→ Allow required client traffic
+
+HTTPS
+→ Allow required client traffic
+
+Other unnecessary inbound traffic
+→ Deny
+```
+
+This exercise demonstrated the Principle of Least Privilege at the network level.
+
+### Cloud Security Connection
+
+Linux host firewalls and cloud network security controls can work together.
+
+```text
+Internet
+    ↓
+Cloud Network Security Control
+    ↓
+Security Group
+    ↓
+Linux Host Firewall
+    ↓
+Listening Service
+    ↓
+Authentication
+    ↓
+Authorization
+```
+
+Using multiple security controls provides Defense in Depth and reduces reliance on a single protection mechanism.
+
+### What I Learned
+
+- Firewalls control network traffic according to security rules.
+- A listening port does not necessarily mean that a service is externally reachable.
+- Inbound and outbound traffic represent different traffic directions.
+- Firewall rules can use addresses, protocols, ports, and connection state.
+- Linux provides technologies such as Netfilter, nftables, and iptables for packet filtering.
+- Unnecessary inbound network access should be restricted.
+- Cloud-level and host-level network security controls can complement each other.
+- Firewall configuration should follow the Principle of Least Privilege.
+
+### Security Perspective
+
+Exposing unnecessary network services increases the attack surface of a Linux server.
+
+Security engineers should identify required services, inspect listening ports, review firewall policies, and restrict network access to only what is necessary.
+
+Host firewalls should be considered together with cloud network controls, service configuration, authentication, and monitoring as part of a Defense in Depth strategy.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how Linux firewalls control network traffic and how listening services, firewall rules, and network security controls interact.
+
+#### Why is it important for Cloud Security?
+
+Cloud workloads are frequently exposed to networks with different trust levels.
+
+Understanding host firewalls and network access controls helps reduce unnecessary exposure and provides another security layer in addition to cloud network controls such as Security Groups.
+
+#### What will I study next?
+
+Next, I will apply the authentication, privilege, and firewall concepts from this week to secure SSH access.
+
+### Next Step
+
+SSH Hardening
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
 |------|---------|
 | Absolute Path | The complete path to a file or directory starting from the root directory. |
 | APT | A package management tool commonly used on Debian-based Linux systems. |
+| Attack Surface | The systems, services, interfaces, and other entry points that could potentially be targeted by an attacker. |
 | Audit Log | A record used to track important actions and changes for accountability and investigation. |
 | Authentication | The process of verifying the identity of a user or system. |
 | Authorization | The process of determining what an authenticated identity is allowed to access or perform. |
@@ -1675,18 +1873,22 @@ Linux Firewall Fundamentals
 | Cron | A Linux service used to execute scheduled commands and scripts. |
 | Crontab | A configuration that defines scheduled cron jobs for a user or system. |
 | Daemon | A background process running without direct user interaction. |
+| Default Deny | A security approach that blocks access by default and explicitly permits required traffic. |
 | Default Gateway | The router that forwards traffic to other networks. |
+| Defense in Depth | A security strategy that uses multiple layers of controls instead of relying on a single protection mechanism. |
 | Dependency | Software required by another program or package to function correctly. |
 | Directory | A folder used to organize files. |
 | Environment Variable | A named value used to provide configuration information to processes. |
 | Execute | Permission to run a file or program. |
 | Export | Makes a shell variable available to child processes. |
 | File | A collection of data stored on disk. |
+| Firewall | A security control that permits or blocks network traffic according to defined rules. |
 | GID | Group Identifier. |
 | Grep | A command-line tool used to search text for matching patterns. |
 | Group | A collection of users who share permissions. |
 | Home Directory | A user's personal working directory. |
 | Hostname | The name assigned to a computer on a network. |
+| Inbound Traffic | Network traffic entering a system or network. |
 | Investigation | The process of examining system information and evidence to understand an event or problem. |
 | IP Address | A unique address assigned to a device on a network. |
 | Journal | The systemd logging system that stores and manages system events. |
@@ -1694,6 +1896,7 @@ Linux Firewall Fundamentals
 | Log | A record of an event generated by a system, service, or application. |
 | Log Retention | The period of time logs are stored before deletion or archival. |
 | Network Interface | A hardware or virtual interface used for network communication. |
+| Outbound Traffic | Network traffic leaving a system or network. |
 | Owner | The user who owns a file or directory. |
 | Package | A bundled collection of software and related metadata. |
 | Package Repository | A source from which software packages can be downloaded and installed. |
@@ -1727,6 +1930,7 @@ Linux Firewall Fundamentals
 | SSH | Secure Shell, a protocol used for encrypted remote access. |
 | Standard Input | Data received by a command or process. |
 | Standard Output | Data produced by a command or process. |
+| Stateful Firewall | A firewall that tracks connection state when applying traffic rules. |
 | sudo | A mechanism that allows authorized users to execute commands with another user's privileges. |
 | sudoers | Configuration that defines which users or groups can execute commands through sudo. |
 | Superuser | A user account with highly privileged administrative access to a system. |
