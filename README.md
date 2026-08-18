@@ -75,7 +75,7 @@
 | ✅      | Day 15 | sudo and Privilege Management      |
 | ✅      | Day 16 | Linux Authentication and PAM       |
 | ✅      | Day 17 | Linux Firewall Fundamentals        |
-| ⏳      | Day 18 | SSH Hardening                      |
+| ✅      | Day 18 | SSH Hardening                      |
 | ⏳      | Day 19 | File Integrity and Hashing         |
 | ⏳      | Day 20 | Basic Linux Security Auditing      |
 | ⏳      | Day 21 | Weekly Summary & Review            |
@@ -1857,6 +1857,222 @@ SSH Hardening
 
 ---
 
+# Day 18
+
+## Topic
+
+SSH Hardening
+
+### Objective
+
+Understand common SSH security risks and learn how to review SSH service configuration, authentication methods, network exposure, key permissions, and logs.
+
+### SSH Hardening Fundamentals
+
+SSH provides secure remote administration for Linux systems, but an exposed SSH service can also become part of the system's attack surface.
+
+SSH hardening should consider multiple security controls rather than relying on a single configuration setting.
+
+```text
+Network Access
+      ↓
+SSH Service
+      ↓
+Authentication
+      ↓
+Linux User
+      ↓
+Privilege Management
+      ↓
+System Resources
+```
+
+### Important SSH Security Settings
+
+| Setting | Purpose |
+|---|---|
+| `PermitRootLogin` | Controls whether root can authenticate directly through SSH. |
+| `PasswordAuthentication` | Controls SSH password authentication. |
+| `PubkeyAuthentication` | Controls public key authentication. |
+| `PermitEmptyPasswords` | Controls whether accounts with empty passwords can authenticate. |
+| `MaxAuthTries` | Limits authentication attempts within an SSH connection. |
+| `AllowUsers` / `AllowGroups` | Can restrict SSH access to selected users or groups. |
+| `X11Forwarding` | Controls SSH X11 forwarding functionality. |
+
+### Commands
+
+| Command | Description |
+|---|---|
+| `systemctl status ssh` | Checks the SSH service status. |
+| `ss -tulpn` | Displays listening sockets and associated processes when permitted. |
+| `sshd -t` | Checks the SSH server configuration for syntax errors. |
+| `sshd -T` | Displays the effective SSH server configuration. |
+| `journalctl -u ssh` | Displays logs associated with the SSH service. |
+| `nft list ruleset` | Displays the current nftables ruleset. |
+
+### Effective SSH Configuration
+
+I inspected the SSH server configuration and compared configuration files with the effective configuration interpreted by sshd.
+
+```bash
+sudo less /etc/ssh/sshd_config
+
+ls -la /etc/ssh/sshd_config.d/
+
+sudo sshd -T
+```
+
+I reviewed several security-related settings.
+
+```bash
+sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication|pubkeyauthentication|permitemptypasswords|maxauthtries|x11forwarding)'
+```
+
+This helped me understand the difference between reading a configuration file and verifying the configuration actually interpreted by the service.
+
+### SSH Key Security
+
+I reviewed the permissions of my SSH directory and key files.
+
+```bash
+ls -ld ~/.ssh
+ls -la ~/.ssh
+```
+
+Private keys should be protected from unauthorized access.
+
+Public keys are designed to be shared with systems where authentication is required, while private keys must remain protected by their owner.
+
+### Hands-on Security Review
+
+I performed a basic SSH security review without making unnecessary configuration changes.
+
+```bash
+systemctl status ssh
+
+sudo ss -tulpn | grep ':22'
+
+sudo sshd -T | grep -E '^(permitrootlogin|passwordauthentication|pubkeyauthentication|permitemptypasswords|maxauthtries|x11forwarding)'
+
+ls -ld ~/.ssh
+ls -la ~/.ssh
+
+sudo nft list ruleset
+
+journalctl -u ssh -n 30
+```
+
+I reviewed the following areas:
+
+```text
+SSH Service Status
+        ↓
+Listening Port
+        ↓
+Effective Configuration
+        ↓
+Authentication Methods
+        ↓
+SSH Key Permissions
+        ↓
+Firewall Exposure
+        ↓
+Logs
+```
+
+### Safe Configuration Changes
+
+I learned that SSH configuration changes should be validated before they are applied.
+
+```bash
+sudo sshd -t
+```
+
+A safer operational workflow is:
+
+```text
+Understand / Backup
+        ↓
+Modify
+        ↓
+Validate Syntax
+        ↓
+Review Effective Configuration
+        ↓
+Apply Change
+        ↓
+Test a New SSH Connection
+        ↓
+Close Existing Session Only After Verification
+```
+
+This reduces the risk of accidentally losing remote administrative access.
+
+### Cloud Security Connection
+
+SSH security in a cloud environment involves multiple security layers.
+
+```text
+Internet
+    ↓
+Cloud Network Control
+    ↓
+Security Group
+    ↓
+Linux Host Firewall
+    ↓
+SSH Service
+    ↓
+Authentication
+    ↓
+Privilege Management
+```
+
+Restricting SSH at the network level and applying secure host configuration provides Defense in Depth.
+
+### What I Learned
+
+- SSH is an important administrative service and also part of a server's attack surface.
+- Running SSH does not automatically mean that it is reachable from every network.
+- Effective configuration should be verified rather than relying only on configuration file contents.
+- Direct root access should be carefully controlled.
+- Public key authentication can reduce reliance on reusable passwords when properly implemented.
+- SSH private keys must be protected.
+- Network restrictions can reduce unnecessary SSH exposure.
+- SSH logs provide useful evidence for troubleshooting and security investigations.
+- Configuration changes should be validated before being applied.
+- Hardening should balance security with operational requirements.
+
+### Security Perspective
+
+SSH hardening requires more than changing the SSH port or disabling a single option.
+
+A secure design combines network restrictions, strong authentication, Least Privilege, secure key management, configuration validation, and monitoring.
+
+These controls reduce the attack surface and limit the impact of compromised credentials or configuration mistakes.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how to perform a basic SSH security review by examining the service status, listening ports, effective configuration, authentication methods, SSH key permissions, firewall exposure, and logs.
+
+#### Why is it important for Cloud Security?
+
+SSH is commonly used to administer Linux-based cloud workloads.
+
+Understanding how to restrict and monitor administrative access is important for protecting cloud servers from unauthorized access.
+
+#### What will I study next?
+
+Next, I will learn how cryptographic hashing can be used to verify file integrity and identify unexpected file changes.
+
+### Next Step
+
+File Integrity and Hashing
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -1864,12 +2080,14 @@ SSH Hardening
 | Absolute Path | The complete path to a file or directory starting from the root directory. |
 | APT | A package management tool commonly used on Debian-based Linux systems. |
 | Attack Surface | The systems, services, interfaces, and other entry points that could potentially be targeted by an attacker. |
+| Attack Surface Reduction | The practice of reducing unnecessary services, access paths, and functionality that could potentially be targeted. |
 | Audit Log | A record used to track important actions and changes for accountability and investigation. |
 | Authentication | The process of verifying the identity of a user or system. |
 | Authorization | The process of determining what an authenticated identity is allowed to access or perform. |
 | Centralized Logging | Collecting logs from multiple systems into a central location for monitoring and analysis. |
 | Child Process | A process created by another process that can inherit parts of its environment. |
 | Configuration File | A file that stores system settings. |
+| Configuration Validation | The process of checking a configuration for correctness before applying it. |
 | Cron | A Linux service used to execute scheduled commands and scripts. |
 | Crontab | A configuration that defines scheduled cron jobs for a user or system. |
 | Daemon | A background process running without direct user interaction. |
@@ -1878,6 +2096,7 @@ SSH Hardening
 | Defense in Depth | A security strategy that uses multiple layers of controls instead of relying on a single protection mechanism. |
 | Dependency | Software required by another program or package to function correctly. |
 | Directory | A folder used to organize files. |
+| Effective Configuration | The configuration actually interpreted and applied by a service after its configuration sources are processed. |
 | Environment Variable | A named value used to provide configuration information to processes. |
 | Execute | Permission to run a file or program. |
 | Export | Makes a shell variable available to child processes. |
@@ -1886,6 +2105,7 @@ SSH Hardening
 | GID | Group Identifier. |
 | Grep | A command-line tool used to search text for matching patterns. |
 | Group | A collection of users who share permissions. |
+| Hardening | The process of reducing security risk by securely configuring a system and disabling or restricting unnecessary functionality. |
 | Home Directory | A user's personal working directory. |
 | Hostname | The name assigned to a computer on a network. |
 | Inbound Traffic | Network traffic entering a system or network. |
@@ -1916,6 +2136,7 @@ SSH Hardening
 | Process | A running instance of a program. |
 | Process Monitoring | Observing running processes to maintain system health and security. |
 | Public Key | A cryptographic key that can be shared and used with its corresponding private key. |
+| Public Key Authentication | An authentication method that verifies possession of a corresponding private key. |
 | Root Directory | The top-level directory in Linux. |
 | Root User | The Linux superuser account with UID 0 and highly privileged system access. |
 | Routing Table | A table that determines how network packets are forwarded. |
