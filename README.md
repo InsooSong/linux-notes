@@ -76,7 +76,7 @@
 | ✅      | Day 16 | Linux Authentication and PAM       |
 | ✅      | Day 17 | Linux Firewall Fundamentals        |
 | ✅      | Day 18 | SSH Hardening                      |
-| ⏳      | Day 19 | File Integrity and Hashing         |
+| ✅      | Day 19 | File Integrity and Hashing         |
 | ⏳      | Day 20 | Basic Linux Security Auditing      |
 | ⏳      | Day 21 | Weekly Summary & Review            |
 
@@ -2073,6 +2073,221 @@ File Integrity and Hashing
 
 ---
 
+# Day 19
+
+## Topic
+
+File Integrity and Hashing
+
+### Objective
+
+Understand how cryptographic hashing can be used to verify file integrity and detect unexpected changes to important Linux files.
+
+### File Integrity
+
+File integrity refers to maintaining confidence that data has not been modified in an unauthorized or unexpected way.
+
+Cryptographic hashes can be used to compare the current state of a file with a previously trusted state.
+
+```text
+Trusted File
+     ↓
+SHA-256
+     ↓
+Baseline Hash
+
+Current File
+     ↓
+SHA-256
+     ↓
+Current Hash
+
+Compare
+  │
+  ├── Same → No detected content change
+  │
+  └── Different → File changed
+```
+
+A hash difference indicates that the file contents changed, but it does not by itself prove malicious activity.
+
+### Hashing vs Encryption
+
+| Concept | Primary Purpose |
+|---|---|
+| Encryption | Protect data confidentiality using cryptographic keys. |
+| Hashing | Produce a fixed-size representation that can be used for integrity verification and other security purposes. |
+
+Cryptographic hashing is not designed to be reversed like encryption.
+
+### Commands
+
+| Command | Description | Example |
+|---|---|---|
+| `sha256sum` | Calculates the SHA-256 hash of a file. | `sha256sum important.txt` |
+| `sha256sum -c` | Verifies files against previously stored SHA-256 values. | `sha256sum -c hashes.sha256` |
+| `stat` | Displays detailed file metadata and timestamps. | `stat important.txt` |
+| `ls -l` | Displays file permissions, ownership, size, and modification information. | `ls -l important.txt` |
+
+### Hands-on Lab
+
+I created a test file and calculated its SHA-256 hash.
+
+```bash
+mkdir -p ~/day19-lab
+cd ~/day19-lab
+
+echo "Cloud Security Study" > important.txt
+
+sha256sum important.txt
+```
+
+I then created a trusted hash baseline.
+
+```bash
+sha256sum important.txt > hashes.sha256
+
+cat hashes.sha256
+
+sha256sum -c hashes.sha256
+```
+
+After modifying the file, I performed the integrity check again.
+
+```bash
+echo "Modified content" >> important.txt
+
+sha256sum -c hashes.sha256
+```
+
+The verification detected that the file no longer matched the trusted baseline.
+
+### Multiple File Integrity Check
+
+I also created a baseline for multiple files.
+
+```bash
+echo "SSH configuration test" > ssh-config.txt
+echo "Firewall configuration test" > firewall.txt
+echo "Cron configuration test" > cron.txt
+
+sha256sum ssh-config.txt firewall.txt cron.txt > baseline.sha256
+
+sha256sum -c baseline.sha256
+```
+
+After modifying one file, the integrity check identified which file had changed.
+
+### File Metadata
+
+I inspected file metadata using:
+
+```bash
+stat important.txt
+```
+
+File timestamps and metadata can provide additional context when investigating a detected change.
+
+A cryptographic hash and file metadata provide different types of evidence and can be analyzed together.
+
+### File Integrity Monitoring
+
+A simplified File Integrity Monitoring workflow can be represented as:
+
+```text
+Important Files
+      ↓
+Create Trusted Baseline
+      ↓
+Monitor Current State
+      ↓
+Compare
+      ↓
+Change Detected
+      ↓
+Investigate
+```
+
+The integrity baseline itself must also be protected and trusted.
+
+### Security Perspective
+
+Important Linux files may include account, privilege, remote access, and scheduled task configuration.
+
+Examples include:
+
+```text
+/etc/passwd
+/etc/shadow
+/etc/sudoers
+/etc/ssh/sshd_config
+/etc/crontab
+```
+
+Unexpected modifications to sensitive files should be investigated.
+
+However, a changed hash does not automatically indicate an attack.
+
+Legitimate software updates, administrator actions, configuration changes, and automation can also modify files.
+
+Security analysis therefore requires additional context such as timestamps, logs, users, processes, and change history.
+
+### Python Practice
+
+I used Python's `hashlib` module to calculate the SHA-256 hash of a file.
+
+```python
+import hashlib
+
+filename = "important.txt"
+
+with open(filename, "rb") as file:
+    data = file.read()
+
+file_hash = hashlib.sha256(data).hexdigest()
+
+print("SHA-256:", file_hash)
+```
+
+This demonstrated how file integrity checking can later be automated using Python.
+
+### What I Learned
+
+- Integrity is one of the fundamental security properties in the CIA Triad.
+- Cryptographic hashes can be used to identify file content changes.
+- SHA-256 produces a 256-bit hash value.
+- A trusted baseline can be used to verify files later.
+- `sha256sum -c` can automatically compare files against stored hashes.
+- File metadata provides additional investigation context.
+- A changed hash proves that the checked content differs from the baseline, not why it changed.
+- File Integrity Monitoring can help identify unexpected changes to security-sensitive files.
+- Integrity baselines must themselves be protected from unauthorized modification.
+- Python can be used to automate file integrity checks.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how cryptographic hashes can be used to create trusted file baselines and detect changes to Linux files.
+
+I also learned that detecting a change is only the beginning of a security investigation.
+
+#### Why is it important for Cloud Security?
+
+Cloud workloads depend on operating system, application, and security configuration files.
+
+Detecting unexpected changes can help identify configuration drift, unauthorized modifications, and suspicious activity.
+
+#### What will I study next?
+
+Next, I will learn how to perform basic Linux security auditing by combining information about users, privileges, services, networking, and system configuration.
+
+### Next Step
+
+Basic Linux Security Auditing
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -2084,12 +2299,16 @@ File Integrity and Hashing
 | Audit Log | A record used to track important actions and changes for accountability and investigation. |
 | Authentication | The process of verifying the identity of a user or system. |
 | Authorization | The process of determining what an authenticated identity is allowed to access or perform. |
+| Baseline | A trusted reference state used for later comparison. |
 | Centralized Logging | Collecting logs from multiple systems into a central location for monitoring and analysis. |
+| Checksum | A value used to help verify data integrity; cryptographic hashes can serve this role when cryptographic properties are required. |
 | Child Process | A process created by another process that can inherit parts of its environment. |
+| Configuration Drift | A change in a system's configuration from its intended or approved state. |
 | Configuration File | A file that stores system settings. |
 | Configuration Validation | The process of checking a configuration for correctness before applying it. |
 | Cron | A Linux service used to execute scheduled commands and scripts. |
 | Crontab | A configuration that defines scheduled cron jobs for a user or system. |
+| Cryptographic Hash | A fixed-size value produced from input data by a cryptographic hash function. |
 | Daemon | A background process running without direct user interaction. |
 | Default Deny | A security approach that blocks access by default and explicitly permits required traffic. |
 | Default Gateway | The router that forwards traffic to other networks. |
@@ -2101,6 +2320,7 @@ File Integrity and Hashing
 | Execute | Permission to run a file or program. |
 | Export | Makes a shell variable available to child processes. |
 | File | A collection of data stored on disk. |
+| File Integrity Monitoring | The process of monitoring files for unexpected changes. |
 | Firewall | A security control that permits or blocks network traffic according to defined rules. |
 | GID | Group Identifier. |
 | Grep | A command-line tool used to search text for matching patterns. |
@@ -2109,6 +2329,7 @@ File Integrity and Hashing
 | Home Directory | A user's personal working directory. |
 | Hostname | The name assigned to a computer on a network. |
 | Inbound Traffic | Network traffic entering a system or network. |
+| Integrity | The security property of maintaining confidence that data has not been improperly modified. |
 | Investigation | The process of examining system information and evidence to understand an event or problem. |
 | IP Address | A unique address assigned to a device on a network. |
 | Journal | The systemd logging system that stores and manages system events. |
@@ -2143,6 +2364,7 @@ File Integrity and Hashing
 | Scheduled Task | A command or program configured to run automatically at a specified time or interval. |
 | Service | A background program managed by the operating system. |
 | Session | A period of interaction between an authenticated user and a system or service. |
+| SHA-256 | A cryptographic hash function that produces a 256-bit hash value. |
 | Shell | A program that interprets commands and interacts with the operating system. |
 | Shell Variable | A variable that exists within the current shell and is not automatically inherited by child processes. |
 | Socket | An endpoint for network communication. |
