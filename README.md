@@ -30,8 +30,8 @@
 - Build practical Linux administration skills.
 - Develop a strong foundation for Cloud Security.
 
-| Status | Day | Topic |
-|--------|-----|----------------------------------|
+| Status | Day    | Topic                                  |
+| ------ | ------ | -------------------------------------- |
 | ✅ | Day 1 | Linux Basic Commands |
 | ✅ | Day 2 | Linux Directory Structure |
 | ✅ | Day 3 | Linux File Permissions |
@@ -50,8 +50,8 @@
 - Build confidence managing Linux servers.
 - Prepare for SSH, package management, logging, and automation.
 
-| Status | Day | Topic |
-|--------|-----|----------------------------------|
+| Status | Day    | Topic                                  |
+| ------ | ------ | -------------------------------------- |
 | ✅ | Day 8 | SSH and Remote Access |
 | ✅ | Day 9 | Package Management |
 | ✅ | Day 10 | Shell and Environment Variables |
@@ -70,15 +70,15 @@
 - Learn how authentication, privileges, and network controls protect Linux systems.
 - Build practical security skills for managing cloud-based Linux servers.
 
-| Status | Day    | Topic                              |
-| ------ | ------ | ---------------------------------- |
-| ✅      | Day 15 | sudo and Privilege Management      |
-| ✅      | Day 16 | Linux Authentication and PAM       |
-| ✅      | Day 17 | Linux Firewall Fundamentals        |
-| ✅      | Day 18 | SSH Hardening                      |
-| ✅      | Day 19 | File Integrity and Hashing         |
-| ⏳      | Day 20 | Basic Linux Security Auditing      |
-| ⏳      | Day 21 | Weekly Summary & Review            |
+| Status | Day    | Topic                                  |
+| ------ | ------ | -------------------------------------- |
+| ✅ | Day 15 | sudo and Privilege Management      |
+| ✅ | Day 16 | Linux Authentication and PAM       |
+| ✅ | Day 17 | Linux Firewall Fundamentals        |
+| ✅ | Day 18 | SSH Hardening                      |
+| ✅ | Day 19 | File Integrity and Hashing         |
+| ✅ | Day 20 | Basic Linux Security Auditing      |
+| ⏳ | Day 21 | Weekly Summary & Review            |
 
 ---
 
@@ -92,13 +92,13 @@
 
 | Status | Day    | Topic                                  |
 | ------ | ------ | -------------------------------------- |
-| ⏳      | Day 22 | System Resource Monitoring             |
-| ⏳      | Day 23 | Network Troubleshooting                |
-| ⏳      | Day 24 | Service Troubleshooting with systemd   |
-| ⏳      | Day 25 | Security Log Analysis                  |
-| ⏳      | Day 26 | Bash Scripting Fundamentals            |
-| ⏳      | Day 27 | Linux Security Audit Mini Project      |
-| ⏳      | Day 28 | Monthly Summary & Review               |
+| ⏳ | Day 22 | System Resource Monitoring             |
+| ⏳ | Day 23 | Network Troubleshooting                |
+| ⏳ | Day 24 | Service Troubleshooting with systemd   |
+| ⏳ | Day 25 | Security Log Analysis                  |
+| ⏳ | Day 26 | Bash Scripting Fundamentals            |
+| ⏳ | Day 27 | Linux Security Audit Mini Project      |
+| ⏳ | Day 28 | Monthly Summary & Review               |
 
 ---
 
@@ -2288,6 +2288,385 @@ Basic Linux Security Auditing
 
 ---
 
+# Day 20
+
+## Topic
+
+Basic Linux Security Auditing
+
+### Objective
+
+Perform a basic Linux security audit by combining previously learned concepts such as user management, privileges, file permissions, services, networking, firewalls, SSH, scheduled tasks, logging, and file integrity.
+
+The goal of this exercise is not only to execute commands, but also to interpret system information from a security perspective.
+
+### Security Audit Methodology
+
+A basic security audit can follow the process:
+
+```text
+Collect
+   ↓
+Analyze
+   ↓
+Identify Findings
+   ↓
+Evaluate Risk
+   ↓
+Recommend
+   ↓
+Document
+```
+
+Security findings should be evaluated in context rather than automatically classified as vulnerabilities.
+
+### Audit Areas
+
+| Area | Security Objective |
+|---|---|
+| System Information | Identify the system being reviewed. |
+| User Accounts | Identify unexpected or unnecessary accounts. |
+| Privileges | Review administrative access and Least Privilege. |
+| File Permissions | Identify unnecessarily permissive access. |
+| SUID Files | Review executables that may run with elevated effective privileges. |
+| Services | Identify unnecessary running or enabled services. |
+| Network | Identify listening services and network exposure. |
+| Firewall | Review network filtering controls. |
+| SSH | Review secure remote administration configuration. |
+| Scheduled Tasks | Identify privileged or unnecessary automated tasks. |
+| Authentication | Review account and authentication configuration. |
+| Logs | Identify events that may require investigation. |
+| File Integrity | Detect unexpected changes to important files. |
+
+### System Information
+
+I identified the Linux system being reviewed.
+
+```bash
+hostnamectl
+uname -a
+cat /etc/os-release
+uptime
+```
+
+Understanding the target system provides important context for a security assessment.
+
+### User and Privilege Audit
+
+I reviewed Linux accounts and privileged access.
+
+```bash
+getent passwd
+
+awk -F: '$7 !~ /(nologin|false)$/ {print $1, $3, $7}' /etc/passwd
+
+awk -F: '$3 == 0 {print $1}' /etc/passwd
+
+sudo -l
+
+getent group sudo
+```
+
+UID 0 accounts and administrative privileges should be reviewed to identify unnecessary or unexpected privileged access.
+
+### File Permission Audit
+
+I reviewed permissions on security-sensitive Linux files.
+
+```bash
+stat -c '%A %a %U %G %n' \
+/etc/passwd \
+/etc/shadow \
+/etc/sudoers \
+/etc/ssh/sshd_config
+```
+
+Sensitive files should only be accessible to users and groups that require access.
+
+### World-Writable File Lab
+
+I created test files with different permissions.
+
+```bash
+mkdir -p ~/day20-lab
+cd ~/day20-lab
+
+touch normal.txt
+touch insecure.txt
+
+chmod 600 normal.txt
+chmod 666 insecure.txt
+```
+
+I identified world-writable files using:
+
+```bash
+find . -type f -perm -0002 -ls
+```
+
+A world-writable file can be modified by any local user.
+
+The security impact depends on the purpose of the file and whether its contents influence privileged or security-sensitive operations.
+
+### SUID Audit
+
+I identified SUID executables on the local filesystem.
+
+```bash
+find / -xdev -type f -perm -4000 -print 2>/dev/null
+```
+
+The presence of a SUID executable does not automatically indicate a vulnerability.
+
+SUID files should be reviewed to determine whether they are expected, required, and securely configured.
+
+### Service Audit
+
+I reviewed running and enabled services.
+
+```bash
+systemctl --type=service --state=running
+
+systemctl list-unit-files --type=service --state=enabled
+```
+
+Unnecessary services can increase a system's attack surface.
+
+### Network Audit
+
+I reviewed listening network services.
+
+```bash
+sudo ss -tulpn
+```
+
+For each listening service, security reviews should consider:
+
+```text
+Which process owns the port?
+        ↓
+Is the service required?
+        ↓
+Which interface is it listening on?
+        ↓
+Is network access restricted?
+```
+
+### Firewall Audit
+
+I reviewed the available host firewall configuration.
+
+```bash
+sudo nft list ruleset
+```
+
+Depending on the environment, firewall configuration may also be reviewed using tools such as `iptables` or `ufw`.
+
+### SSH Security Audit
+
+I reviewed the SSH service and effective SSH configuration.
+
+```bash
+systemctl status ssh
+
+sudo ss -tulpn | grep ':22'
+
+sudo sshd -T | grep -E \
+'^(permitrootlogin|passwordauthentication|pubkeyauthentication|permitemptypasswords|maxauthtries|x11forwarding)'
+```
+
+SSH security should be evaluated together with authentication methods, privileges, firewall restrictions, and logging.
+
+### Scheduled Task Audit
+
+I reviewed scheduled tasks.
+
+```bash
+cat /etc/crontab
+
+ls -la /etc/cron.d/
+
+crontab -l
+```
+
+Privileged scheduled tasks should not depend on files or scripts that can be modified by unauthorized users.
+
+### Authentication Audit
+
+I reviewed account and authentication information.
+
+```bash
+sudo passwd -S "$(whoami)"
+
+sudo chage -l "$(whoami)"
+
+ls -la /etc/pam.d/
+```
+
+Authentication configuration should be reviewed carefully because incorrect changes can affect system access.
+
+### Log Audit
+
+I reviewed system and SSH-related events.
+
+```bash
+journalctl -p warning -b
+
+journalctl -u ssh -n 50
+
+journalctl -b | grep -i 'failed'
+
+journalctl -b | grep -i 'sudo'
+```
+
+Security-related log events require context before they can be classified as malicious or benign.
+
+### File Integrity
+
+I reviewed file integrity using a previously created SHA-256 baseline.
+
+```bash
+sha256sum -c hashes.sha256
+```
+
+A changed hash indicates that file contents differ from the trusted baseline, but additional investigation is required to determine why the change occurred.
+
+### Finding Workflow
+
+I practiced documenting a security finding using the following structure:
+
+```text
+Finding
+   ↓
+Evidence
+   ↓
+Risk
+   ↓
+Recommendation
+   ↓
+Remediation
+   ↓
+Verification
+```
+
+Example:
+
+**Finding**
+
+A world-writable test file was identified.
+
+**Evidence**
+
+```bash
+find ~/day20-lab -type f -perm -0002 -ls
+```
+
+**Risk**
+
+A world-writable file can be modified by any local user. The security impact depends on how the file is used.
+
+**Recommendation**
+
+Restrict write permissions to only the users or groups that require them.
+
+**Remediation**
+
+```bash
+chmod 640 ~/day20-lab/insecure.txt
+```
+
+**Verification**
+
+```bash
+find ~/day20-lab -type f -perm -0002 -ls
+```
+
+### Security Audit Checklist
+
+```text
+[ ] System information
+[ ] User accounts
+[ ] UID 0 accounts
+[ ] sudo privileges
+[ ] Sensitive file permissions
+[ ] World-writable files
+[ ] SUID files
+[ ] Running services
+[ ] Enabled services
+[ ] Listening ports
+[ ] Firewall configuration
+[ ] SSH configuration
+[ ] Scheduled tasks
+[ ] Authentication configuration
+[ ] Security-related logs
+[ ] File integrity
+```
+
+### What I Learned
+
+- Security auditing requires both information collection and analysis.
+- A security-related configuration does not automatically represent a vulnerability.
+- Privileged accounts should follow the Principle of Least Privilege.
+- Sensitive file permissions should be reviewed regularly.
+- SUID executables require contextual security analysis.
+- Unnecessary services and listening ports can increase the attack surface.
+- SSH security depends on multiple controls including network restrictions, authentication, privileges, and logging.
+- Scheduled privileged tasks should use securely protected files and scripts.
+- Logs provide important context during security investigations.
+- File integrity monitoring can identify unexpected changes.
+- Findings should include evidence, risk, and actionable recommendations.
+- Remediation should be followed by verification.
+
+### Security Perspective
+
+A Linux security audit should evaluate multiple layers of the system rather than relying on a single security control.
+
+```text
+Accounts
+    ↓
+Authentication
+    ↓
+Privileges
+    ↓
+Services
+    ↓
+Network
+    ↓
+Firewall
+    ↓
+Applications
+    ↓
+Logs / Monitoring
+```
+
+Combining these areas provides a more complete view of the security posture of a Linux workload.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how to combine Linux administration and security concepts into a structured basic security audit.
+
+Instead of only executing commands, I practiced interpreting system information, identifying potential findings, evaluating their security context, and recommending remediation.
+
+#### Why is it important for Cloud Security?
+
+Cloud workloads frequently run on Linux systems.
+
+Cloud-level security controls such as IAM and Security Groups do not replace operating system security.
+
+Understanding Linux security auditing helps identify risks inside cloud workloads and supports a Defense in Depth security strategy.
+
+#### What will I study next?
+
+Next, I will review the Linux Security Fundamentals topics from this week and summarize the most important security concepts and practical lessons.
+
+### Next Step
+
+Week 3 Security Summary & Review
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -2317,6 +2696,7 @@ Basic Linux Security Auditing
 | Directory | A folder used to organize files. |
 | Effective Configuration | The configuration actually interpreted and applied by a service after its configuration sources are processed. |
 | Environment Variable | A named value used to provide configuration information to processes. |
+| Evidence | Information used to support a security finding or investigation. |
 | Execute | Permission to run a file or program. |
 | Export | Makes a shell variable available to child processes. |
 | File | A collection of data stored on disk. |
@@ -2358,10 +2738,14 @@ Basic Linux Security Auditing
 | Process Monitoring | Observing running processes to maintain system health and security. |
 | Public Key | A cryptographic key that can be shared and used with its corresponding private key. |
 | Public Key Authentication | An authentication method that verifies possession of a corresponding private key. |
+| Remediation | An action taken to correct or reduce an identified security risk. |
 | Root Directory | The top-level directory in Linux. |
 | Root User | The Linux superuser account with UID 0 and highly privileged system access. |
 | Routing Table | A table that determines how network packets are forwarded. |
 | Scheduled Task | A command or program configured to run automatically at a specified time or interval. |
+| Security Audit | A structured review of a system's configuration, controls, and security posture. |
+| Security Finding | An observed condition that may require security review or remediation. |
+| Security Posture | The overall state of an organization's or system's security controls and risks. |
 | Service | A background program managed by the operating system. |
 | Session | A period of interaction between an authenticated user and a system or service. |
 | SHA-256 | A cryptographic hash function that produces a 256-bit hash value. |
@@ -2376,6 +2760,7 @@ Basic Linux Security Auditing
 | Stateful Firewall | A firewall that tracks connection state when applying traffic rules. |
 | sudo | A mechanism that allows authorized users to execute commands with another user's privileges. |
 | sudoers | Configuration that defines which users or groups can execute commands through sudo. |
+| SUID | A special Linux permission that can cause an executable to run with the effective user ID of its file owner. |
 | Superuser | A user account with highly privileged administrative access to a system. |
 | Supply Chain Security | The practice of protecting software and its dependencies throughout the development and distribution process. |
 | Terminal | A command-line interface used to interact with Linux. |
@@ -2383,4 +2768,6 @@ Basic Linux Security Auditing
 | Troubleshooting | A systematic process used to identify and resolve the cause of a technical problem. |
 | UDP | A connectionless network protocol with low overhead. |
 | UID | User Identifier. |
+| Verification | The process of confirming that remediation or a security control works as intended. |
 | Wildcard | A symbol used to represent one or more characters when matching file names. |
+| World-Writable | A permission state that allows all users to modify a file or directory. |
