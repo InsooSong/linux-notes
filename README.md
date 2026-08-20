@@ -78,7 +78,7 @@
 | ✅ | Day 18 | SSH Hardening                      |
 | ✅ | Day 19 | File Integrity and Hashing         |
 | ✅ | Day 20 | Basic Linux Security Auditing      |
-| ⏳ | Day 21 | Weekly Summary & Review            |
+| ✅ | Day 21 | Weekly Summary & Review            |
 
 ---
 
@@ -2667,6 +2667,258 @@ Week 3 Security Summary & Review
 
 ---
 
+# Day 21
+
+## Topic
+
+Week 3 Security Summary & Review
+
+### Objective
+
+Review the Linux Security Fundamentals covered during Week 3 and apply them together through a structured Linux security review.
+
+The goal of this review is to understand how authentication, privileges, network controls, remote access, file integrity, logging, and security auditing work together to protect a Linux system.
+
+### Week 3 Topics
+
+| Day | Topic |
+|---|---|
+| Day 15 | sudo and Privilege Management |
+| Day 16 | Linux Authentication and PAM |
+| Day 17 | Linux Firewall Fundamentals |
+| Day 18 | SSH Hardening |
+| Day 19 | File Integrity and Hashing |
+| Day 20 | Basic Linux Security Auditing |
+
+### Security Concepts Reviewed
+
+| Area | Security Focus |
+|---|---|
+| Privilege Management | Least Privilege and controlled administrative access |
+| Authentication | Identity verification and PAM |
+| Firewall | Network access control and attack-surface reduction |
+| SSH | Secure remote administration |
+| File Integrity | Detection of unexpected file changes |
+| Security Auditing | Structured security assessment and documentation |
+| Logging | Evidence collection and investigation |
+
+### Integrated Security Review
+
+I performed a basic review of my Linux environment using the security concepts learned during Week 3.
+
+```bash
+hostnamectl
+uname -a
+
+whoami
+id
+
+awk -F: '$3 == 0 {print $1}' /etc/passwd
+
+sudo -l
+getent group sudo
+
+ls -l /etc/passwd
+ls -l /etc/shadow
+
+sudo ss -tulpn
+sudo nft list ruleset
+
+systemctl status ssh
+
+sudo sshd -T | grep -E \
+'^(permitrootlogin|passwordauthentication|pubkeyauthentication|permitemptypasswords|maxauthtries|x11forwarding)'
+
+crontab -l
+cat /etc/crontab
+
+find / -xdev -type f -perm -4000 -print 2>/dev/null
+
+journalctl -b -p warning
+journalctl -u ssh -n 30
+```
+
+### Security Review Approach
+
+During the review, I practiced following a structured investigation process.
+
+```text
+Identify the Asset
+        ↓
+Collect Evidence
+        ↓
+Understand the Configuration
+        ↓
+Evaluate Security Context
+        ↓
+Identify Findings
+        ↓
+Recommend Remediation
+        ↓
+Verify the Result
+```
+
+Security settings should not automatically be classified as vulnerabilities without understanding their purpose and operating context.
+
+### Authentication and Privilege
+
+I learned that authentication and authorization represent different security functions.
+
+```text
+Authentication
+"Who are you?"
+        ↓
+Authorization
+"What are you allowed to do?"
+        ↓
+Privileged Action
+```
+
+PAM provides an authentication framework for Linux applications, while sudo and permissions help control privileged operations.
+
+### Network and SSH Security
+
+Network security requires multiple layers of control.
+
+```text
+Network
+    ↓
+Cloud / Network Control
+    ↓
+Host Firewall
+    ↓
+Listening Service
+    ↓
+SSH Configuration
+    ↓
+Authentication
+    ↓
+Privilege Management
+```
+
+A listening port does not automatically mean that a service is reachable from every network.
+
+SSH security should therefore be evaluated together with network exposure, authentication methods, key management, privileges, and logs.
+
+### File Integrity
+
+I reviewed how SHA-256 hashes can be used to compare the current state of a file with a trusted baseline.
+
+```text
+Trusted Baseline
+        ↓
+Current File
+        ↓
+Hash Comparison
+        ↓
+Change Detected?
+        ↓
+Investigation
+```
+
+A changed hash indicates that file contents changed but does not explain why the change occurred.
+
+Additional evidence is required to distinguish authorized changes from suspicious activity.
+
+### Security Auditing
+
+I practiced documenting security observations using:
+
+```text
+Finding
+   ↓
+Evidence
+   ↓
+Risk
+   ↓
+Recommendation
+   ↓
+Remediation
+   ↓
+Verification
+```
+
+This helped me understand that a security audit is more than executing commands.
+
+The important part is interpreting the information and explaining the security impact.
+
+### Week 3 Key Takeaways
+
+- Administrative privileges should follow the Principle of Least Privilege.
+- Authentication and authorization are separate security functions.
+- PAM provides a common authentication framework for Linux applications.
+- Unnecessary network exposure increases the attack surface.
+- Host firewalls and cloud network controls can provide Defense in Depth.
+- SSH hardening requires secure configuration, strong authentication, network restrictions, and monitoring.
+- Cryptographic hashes can help detect unexpected file changes.
+- A changed file does not automatically indicate malicious activity.
+- SUID files and other privileged configurations require contextual analysis.
+- Security audits should collect evidence before drawing conclusions.
+- Findings should include clear risks and actionable recommendations.
+- Remediation should always be followed by verification.
+
+### Security Perspective
+
+Linux security is created by multiple controls working together.
+
+```text
+Identity
+    ↓
+Authentication
+    ↓
+Authorization
+    ↓
+Network Access
+    ↓
+Services
+    ↓
+System and File Integrity
+    ↓
+Logging and Monitoring
+    ↓
+Security Auditing
+```
+
+A weakness in one layer can increase risk, while multiple security controls can reduce the impact of individual failures.
+
+This is an important example of Defense in Depth.
+
+### Reflection
+
+#### What did I accomplish this week?
+
+I completed my first dedicated Linux Security Fundamentals week.
+
+I learned how to review privileges, authentication, firewalls, SSH configuration, file integrity, and system security settings from a security perspective.
+
+#### What was the most important lesson?
+
+The most important lesson was that identifying a security-related configuration is not the same as proving that a vulnerability exists.
+
+Security analysis requires evidence, context, risk evaluation, and verification.
+
+#### What was difficult?
+
+I will continue reviewing any Linux security concepts or configuration results that were difficult to interpret during the hands-on exercises.
+
+#### Why is it important for Cloud Security?
+
+Cloud workloads often run on Linux systems.
+
+Cloud-level security controls cannot fully protect a workload if the operating system has insecure privileges, exposed services, weak authentication, or insecure configuration.
+
+Understanding Linux security provides an important foundation for Defense in Depth in cloud environments.
+
+#### What will I study next?
+
+Next, I will begin Linux Troubleshooting and Security Operations by learning how to monitor system resources and identify abnormal system behavior.
+
+### Next Step
+
+Linux Troubleshooting and Security Operations — System Resource Monitoring
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -2743,7 +2995,9 @@ Week 3 Security Summary & Review
 | Root User | The Linux superuser account with UID 0 and highly privileged system access. |
 | Routing Table | A table that determines how network packets are forwarded. |
 | Scheduled Task | A command or program configured to run automatically at a specified time or interval. |
+| Security Assessment | A structured evaluation of a system's security controls, configuration, and potential risks. |
 | Security Audit | A structured review of a system's configuration, controls, and security posture. |
+| Security Context | The surrounding technical and operational information required to correctly interpret a security observation. |
 | Security Finding | An observed condition that may require security review or remediation. |
 | Security Posture | The overall state of an organization's or system's security controls and risks. |
 | Service | A background program managed by the operating system. |
