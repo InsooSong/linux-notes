@@ -92,7 +92,7 @@
 
 | Status | Day    | Topic                                  |
 | ------ | ------ | -------------------------------------- |
-| ⏳ | Day 22 | System Resource Monitoring             |
+| ✅ | Day 22 | System Resource Monitoring             |
 | ⏳ | Day 23 | Network Troubleshooting                |
 | ⏳ | Day 24 | Service Troubleshooting with systemd   |
 | ⏳ | Day 25 | Security Log Analysis                  |
@@ -2919,6 +2919,335 @@ Linux Troubleshooting and Security Operations — System Resource Monitoring
 
 ---
 
+# Day 22
+
+## Topic
+
+System Resource Monitoring
+
+### Objective
+
+Learn how to monitor Linux system resources and investigate performance problems using CPU, memory, load, disk, and process information.
+
+The goal is to develop a structured troubleshooting approach based on evidence rather than immediately changing system configuration or restarting services.
+
+### Troubleshooting Methodology
+
+A basic troubleshooting process can follow:
+
+```text
+Problem
+   ↓
+Observe
+   ↓
+Collect Evidence
+   ↓
+Identify Resource
+   ↓
+Identify Process
+   ↓
+Investigate Cause
+   ↓
+Take Action
+   ↓
+Verify
+```
+
+Stopping a problematic process may remove a symptom, but additional investigation may still be required to identify the root cause.
+
+### System Load
+
+I reviewed system uptime and load average.
+
+```bash
+uptime
+```
+
+Load average represents system load over approximately 1, 5, and 15 minute periods.
+
+It should be interpreted together with CPU count, CPU utilization, workload characteristics, and other system information.
+
+```bash
+nproc
+lscpu
+```
+
+Load average is not the same as CPU utilization.
+
+### CPU and Process Monitoring
+
+I used `top` to monitor system and process activity.
+
+```bash
+top
+```
+
+Important information includes:
+
+- Load average
+- CPU utilization
+- Memory usage
+- Swap usage
+- Process ID
+- Process owner
+- CPU usage
+- Memory usage
+- Command
+
+I also identified processes consuming the most CPU and memory.
+
+```bash
+ps aux --sort=-%cpu | head
+
+ps aux --sort=-%mem | head
+```
+
+### Memory Monitoring
+
+I reviewed system memory usage.
+
+```bash
+free -h
+```
+
+Linux may use available memory for caching, so low `free` memory alone does not necessarily indicate memory exhaustion.
+
+The `available` value and overall system behavior should also be considered.
+
+I also reviewed swap configuration.
+
+```bash
+swapon --show
+```
+
+### Process Investigation
+
+After identifying a process of interest, I reviewed additional process information.
+
+```bash
+ps -fp <PID>
+
+cat /proc/<PID>/status
+
+readlink -f /proc/<PID>/exe
+
+tr '\0' ' ' < /proc/<PID>/cmdline
+
+ps -o pid,ppid,user,%cpu,%mem,cmd -p <PID>
+```
+
+Process information should be evaluated together with its owner, executable, command line, parent process, resource usage, and operational context.
+
+### `/proc` Filesystem
+
+I explored the Linux `/proc` virtual filesystem.
+
+```bash
+echo $$
+
+ls /proc/$$
+
+cat /proc/$$/status
+
+tr '\0' ' ' < /proc/$$/cmdline
+
+readlink -f /proc/$$/exe
+```
+
+The `/proc` filesystem exposes information about running processes and the Linux kernel.
+
+### CPU Troubleshooting Lab
+
+I created a temporary CPU-intensive process.
+
+```bash
+yes > /dev/null
+```
+
+From another terminal, I identified the process using:
+
+```bash
+top
+
+ps aux --sort=-%cpu | head
+```
+
+After identifying its PID, I collected additional evidence.
+
+```bash
+ps -fp <PID>
+
+cat /proc/<PID>/status
+
+readlink -f /proc/<PID>/exe
+
+tr '\0' ' ' < /proc/<PID>/cmdline
+```
+
+I then terminated the test process.
+
+```bash
+kill <PID>
+```
+
+Finally, I verified that the process was no longer running and reviewed the system state again.
+
+```bash
+ps -p <PID>
+
+top
+
+uptime
+```
+
+This demonstrated the troubleshooting process:
+
+```text
+Detect
+   ↓
+Identify
+   ↓
+Investigate
+   ↓
+Remediate
+   ↓
+Verify
+```
+
+### Disk Monitoring
+
+I performed basic disk and inode checks.
+
+```bash
+df -h
+
+df -i
+```
+
+Disk exhaustion can affect applications, databases, logging, and other system services.
+
+### Security Perspective
+
+High resource usage does not automatically indicate malicious activity.
+
+Unexpected CPU, memory, disk, or process activity should be investigated using additional context.
+
+```text
+Resource Anomaly
+       ↓
+Identify Process
+       ↓
+Process Owner
+       ↓
+Executable
+       ↓
+Command Line
+       ↓
+Parent Process
+       ↓
+Logs / Network Activity
+       ↓
+Expected or Unexpected?
+```
+
+This approach helps distinguish normal workload behavior, operational problems, misconfiguration, and potentially suspicious activity.
+
+### System Resource Checklist
+
+```text
+[ ] System uptime
+[ ] Load average
+[ ] CPU count
+[ ] CPU utilization
+[ ] Memory usage
+[ ] Swap usage
+[ ] Disk space
+[ ] Inode usage
+[ ] High CPU processes
+[ ] High memory processes
+[ ] Process owner
+[ ] Process executable
+[ ] Process command line
+[ ] Parent process
+```
+
+### Python Practice
+
+I used Python to retrieve information about the running Python process from `/proc`.
+
+```python
+import os
+
+pid = os.getpid()
+
+print("Python PID:", pid)
+
+status_file = f"/proc/{pid}/status"
+
+with open(status_file, "r") as file:
+    for line in file:
+        if line.startswith(("Name:", "Pid:", "PPid:", "VmRSS:")):
+            print(line.strip())
+```
+
+This demonstrated how Python can be used to collect Linux process information for future security and monitoring automation.
+
+### Cloud Security Connection
+
+Cloud monitoring and operating system monitoring provide different layers of visibility.
+
+```text
+Cloud Monitoring
+       ↓
+Instance Metrics
+       ↓
+Linux System
+       ↓
+Process Investigation
+       ↓
+Root Cause Analysis
+```
+
+Understanding both layers is useful when investigating performance or security issues affecting cloud workloads.
+
+### What I Learned
+
+- Troubleshooting should begin with observation and evidence collection.
+- Load average and CPU utilization represent different system characteristics.
+- CPU count should be considered when interpreting system load.
+- Linux memory usage should not be evaluated using only the `free` value.
+- `top` and `ps` can identify resource-intensive processes.
+- `/proc` provides detailed information about processes and the kernel.
+- Process owner, executable, command line, and parent process provide useful investigation context.
+- Disk and inode exhaustion can cause application and system problems.
+- High resource usage does not automatically indicate malicious activity.
+- Terminating a process may remove a symptom without identifying the root cause.
+- Remediation should be followed by verification.
+
+### Reflection
+
+#### What did I learn today?
+
+Today I learned how to monitor Linux system resources and investigate high resource usage using system and process information.
+
+I also practiced identifying a CPU-intensive process, collecting evidence about it, terminating it, and verifying the result.
+
+#### Why is it important for Cloud Security?
+
+Performance anomalies can result from normal workloads, configuration problems, software defects, or potentially suspicious activity.
+
+Understanding Linux resource and process monitoring helps investigate problems inside cloud workloads instead of relying only on cloud-level metrics.
+
+#### What will I study next?
+
+Next, I will learn how to troubleshoot disk usage, filesystems, and storage-related problems.
+
+### Next Step
+
+Disk and Filesystem Troubleshooting
+
+---
+
 # Vocabulary
 
 | Term | Meaning |
@@ -2931,12 +3260,14 @@ Linux Troubleshooting and Security Operations — System Resource Monitoring
 | Authentication | The process of verifying the identity of a user or system. |
 | Authorization | The process of determining what an authenticated identity is allowed to access or perform. |
 | Baseline | A trusted reference state used for later comparison. |
+| Bottleneck | A resource or component that limits overall system performance. |
 | Centralized Logging | Collecting logs from multiple systems into a central location for monitoring and analysis. |
 | Checksum | A value used to help verify data integrity; cryptographic hashes can serve this role when cryptographic properties are required. |
 | Child Process | A process created by another process that can inherit parts of its environment. |
 | Configuration Drift | A change in a system's configuration from its intended or approved state. |
 | Configuration File | A file that stores system settings. |
 | Configuration Validation | The process of checking a configuration for correctness before applying it. |
+| CPU Utilization | The proportion of CPU capacity being used for processing work. |
 | Cron | A Linux service used to execute scheduled commands and scripts. |
 | Crontab | A configuration that defines scheduled cron jobs for a user or system. |
 | Cryptographic Hash | A fixed-size value produced from input data by a cryptographic hash function. |
@@ -2966,6 +3297,7 @@ Linux Troubleshooting and Security Operations — System Resource Monitoring
 | IP Address | A unique address assigned to a device on a network. |
 | Journal | The systemd logging system that stores and manages system events. |
 | Least Privilege | A security principle that grants only the permissions required to perform a task. |
+| Load Average | A Linux metric representing the average system load over a period of time. |
 | Log | A record of an event generated by a system, service, or application. |
 | Log Retention | The period of time logs are stored before deletion or archival. |
 | Network Interface | A hardware or virtual interface used for network communication. |
@@ -2979,10 +3311,11 @@ Linux Troubleshooting and Security Operations — System Resource Monitoring
 | PATH | An environment variable containing directories used to locate executable commands. |
 | Permission | Controls access to files and directories. |
 | Persistence | A technique used to maintain access to a system over time. |
-| PID | Process Identifier. |
+| PID | A unique process identifier assigned to a running process. |
 | Ping | A utility used to test network connectivity. |
 | Pipe | A mechanism that passes the output of one command as input to another command. |
 | Port | A communication endpoint used by network services. |
+| PPID | The process identifier of a process's parent. |
 | Priority | A severity level assigned to a log event. |
 | Private Key | A secret cryptographic key that must be protected by its owner. |
 | Privilege Escalation | The process of gaining permissions beyond those originally authorized. |
@@ -2991,6 +3324,8 @@ Linux Troubleshooting and Security Operations — System Resource Monitoring
 | Public Key | A cryptographic key that can be shared and used with its corresponding private key. |
 | Public Key Authentication | An authentication method that verifies possession of a corresponding private key. |
 | Remediation | An action taken to correct or reduce an identified security risk. |
+| Resource Monitoring | The process of observing CPU, memory, disk, and other system resources. |
+| Root Cause | The underlying reason that caused a problem or abnormal condition. |
 | Root Directory | The top-level directory in Linux. |
 | Root User | The Linux superuser account with UID 0 and highly privileged system access. |
 | Routing Table | A table that determines how network packets are forwarded. |
@@ -3025,3 +3360,4 @@ Linux Troubleshooting and Security Operations — System Resource Monitoring
 | Verification | The process of confirming that remediation or a security control works as intended. |
 | Wildcard | A symbol used to represent one or more characters when matching file names. |
 | World-Writable | A permission state that allows all users to modify a file or directory. |
+| `/proc` | A Linux virtual filesystem that exposes process and kernel information. |
